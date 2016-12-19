@@ -1,0 +1,45 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link href="../css/style.css" rel="stylesheet" type="text/css"/>
+        <title>Kullanıcı Ekleme</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:messages id="messagess" showDetail="true" autoUpdate="true" />
+            <center>
+            <p:panelGrid columns="2" id="sifreGiris">
+                <h:outputText value="TC Kimlik No: " />
+                <p:inputText value="#{kullaniciManagedBean.tcKimlikNoYeni}" />
+                <h:outputText value="Ad: " />
+                <p:inputText value="#{kullaniciManagedBean.adYeni}" />
+                <h:outputText value="Soyad: " />
+                <p:inputText value="#{kullaniciManagedBean.soyadYeni}" />
+                <h:outputText value="Şifre: " />
+                <p:password id="pwd1" value="#{kullaniciManagedBean.sifreYeni}" feedback="true"
+                            promptLabel="Lütfen şifre giriniz" weakLabel="Zayıf"
+                            goodLabel="Orta seviye" strongLabel="Güçlü" match="pwd2" label="Şifre"
+                            required="true" />
+                <h:outputText value="Şifre Tekrar: " />
+                <p:password id="pwd2" value="#{kullaniciManagedBean.sifre2Yeni}" feedback="true"
+                            promptLabel="Lütfen şifreyi tekrar giriniz." weakLabel="Zayıf"
+                            goodLabel="Orta seviye" strongLabel="Güçlü" required="true" label="Şifre Tekrar" />	
+                <p:fileUpload id="choose" label="Resim Seç" 
+				fileUploadListener="#{kullaniciManagedBean.handleFileUpload}"				
+				multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+				update="myImage" required="true" mode="advanced" auto="true" />
+                <p:graphicImage id="myImage" value="#{kullaniciManagedBean.image}" height="100"/>                    
+            </p:panelGrid>
+            </center>
+            <p:growl id="messages" showDetail="true" />
+            <br/>
+            <center>
+            <p:commandButton id="saveButton" update="messages" value="Kaydet"
+                             ajax="false" actionListener="#{kullaniciManagedBean.kullaniciEkle}" />
+            </center>
+        </h:form>
+    </h:body>
+</html>

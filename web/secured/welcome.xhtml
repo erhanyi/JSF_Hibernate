@@ -1,0 +1,138 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:messages id="messages" closable="true" autoUpdate="true"/>
+            <p:dataTable value="#{kullaniciManagedBean.kullaniciListesi}" var="c" id="table" 
+                         emptyMessage="Liste boştur." >
+                <f:facet name="header">
+                    Kullanıcı Listesi
+                </f:facet>
+                <p:column headerText="TC Kimlik No" style="text-align: center">
+                    <p:outputLabel value="#{c.tcKimlikNo}" />
+                </p:column>
+                <p:column headerText="Ad Soyad" style="text-align: center">                   
+                    <p:outputLabel value="#{c.ad} #{c.soyad}" />
+                </p:column>
+                <p:column headerText="E-Posta" style="text-align: center">                   
+                    <p:outputLabel value="#{c.email}" />
+                </p:column>                                
+                <p:column headerText="Fotoğraf" style="text-align: center">
+                    <center>
+                        <p:graphicImage id="myImage" value="#{imageStreamer.image}" 
+                                        height="100" alt="Resim bulunamadı.">
+                            <f:param name="imageId" value="#{c.tcKimlikNo}" />
+                        </p:graphicImage>
+                    </center>
+                </p:column>
+                <p:column>
+                    <center>
+                        <p:commandButton value="Düzenle" action="#{kullaniciManagedBean.duzenle}" 
+                                         icon="ui-icon-pencil" update="ekleForm">
+                            <f:setPropertyActionListener value="#{c}" 
+                                                         target="#{kullaniciManagedBean.secilenKullanici}" />
+                            <p:resetInput target="ekleForm" />
+                        </p:commandButton>
+                        <p:commandButton value="Sil" onclick="PF('sil').show();" icon="ui-icon-trash">
+                            <f:setPropertyActionListener value="#{c}" 
+                                                         target="#{kullaniciManagedBean.secilenKullanici}" />
+                        </p:commandButton>
+                    </center>
+                </p:column>
+                <f:facet name="footer">
+                    Toplam kullanıcı sayısı: #{fn:length(kullaniciManagedBean.kullaniciListesi)}
+                </f:facet>
+            </p:dataTable>
+            <br/>
+            <center>
+                <p:commandButton value="Yeni Kullanıcı Ekle" icon="ui-icon-extlink" 
+                                 action="#{kullaniciManagedBean.temizleKullaniciEkle}"
+                                 oncomplete="PF('dlg').show();" update="ekleForm">
+                    <p:resetInput target="ekleForm" />
+                </p:commandButton>
+                <p:commandButton action="#{kullaniciManagedBean.startDownload}" value="Dosya İndir (Örnek)" ajax="false"/>
+            </center>
+        </h:form>
+
+        <p:dialog header="Kullanıcı Ekle" widgetVar="dlg" id="dialog">
+            <h:form id="ekleForm">
+                <p:messages id="msg" autoUpdate="true" closable="true"/>
+                <center>
+                    <p:panelGrid columns="2" id="sifreGiris">
+                        <h:outputText value="TC Kimlik No: " />
+                        <p:inputText value="#{kullaniciManagedBean.tcKimlikNoYeni}" required="true" 
+                                     requiredMessage="Lütfen TC Kimlik Numarası giriniz."
+                                     disabled="#{kullaniciManagedBean.gosterGuncelle}"/>
+                        <h:outputText value="Ad: " />
+                        <p:inputText value="#{kullaniciManagedBean.adYeni}" required="true" 
+                                     requiredMessage="Lütfen adınızı giriniz."
+                                     style="text-transform: uppercase;"/>
+                        <h:outputText value="Soyad: " />
+                        <p:inputText value="#{kullaniciManagedBean.soyadYeni}" required="true" 
+                                     requiredMessage="Lütfen soyadınızı giriniz."
+                                     style="text-transform: uppercase;"/>
+                        <h:outputText value="E-Posta: " />
+                        <p:inputText value="#{kullaniciManagedBean.emailYeni}" required="true" 
+                                     requiredMessage="Lütfen email adresinizi giriniz." validator="emailValidator"/>
+                        <h:outputText value="Şifre: " />
+                        <p:password id="pwd1" value="#{kullaniciManagedBean.sifreYeni}" feedback="true"
+                                    promptLabel="Lütfen şifre giriniz." weakLabel="Zayıf" 
+                                    requiredMessage="Lütfen şifre giriniz."
+                                    goodLabel="Orta seviye" strongLabel="Güçlü" match="pwd2" label="Şifre"
+                                    required="true" />
+                        <h:outputText value="Şifre Tekrar: " />
+                        <p:password id="pwd2" value="#{kullaniciManagedBean.sifre2Yeni}" feedback="true"
+                                    promptLabel="Lütfen şifreyi tekrar giriniz." weakLabel="Zayıf" 
+                                    requiredMessage="Lütfen şifreyi tekrar giriniz."
+                                    goodLabel="Orta seviye" strongLabel="Güçlü" required="true" label="Şifre Tekrar" />	
+                        <p:fileUpload id="choose" label="Resim Seç" previewWidth="50"                                       
+                                      fileUploadListener="#{kullaniciManagedBean.handleFileUpload}"				
+                                      multiple="false"  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" auto="true"
+                                      update="myImage" required="true" mode="advanced" 
+                                      requiredMessage="Lütfen resim yükleyiniz."/>
+                        <p:graphicImage id="myImage" value="#{kullaniciManagedBean.image}" height="100" 
+                                        alt="Resim Yok."/>                    
+                    </p:panelGrid>
+                </center>
+                <br/>
+                <center>
+                    <p:commandButton id="kaydetButon" update="form:table, ekleForm" value="Kaydet" 
+                                     actionListener="#{kullaniciManagedBean.kullaniciEkle}"
+                                     rendered="#{!kullaniciManagedBean.gosterGuncelle}"
+                                     />
+                    <p:commandButton id="guncelleButon" update="form:table, ekleForm" value="Güncelle" 
+                                     actionListener="#{kullaniciManagedBean.kullaniciGuncelle}"
+                                     rendered="#{kullaniciManagedBean.gosterGuncelle}"
+                                     />
+                    <p:commandButton id="kapatButon" value="Kapat" style="margin-left: 10px;"
+                                     actionListener="#{kullaniciManagedBean.temizleKullaniciEkle()}"
+                                     update="form:table, ekleForm" oncomplete="PF('dlg').hide();"
+                                     process="@this"/>
+                </center>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Kullanıcı Sil Onay" widgetVar="sil" resizable="false">
+            <h:form id="silForm">               
+                <p:outputLabel value="Kullanıcıyı silmek istediğinize emin misiniz?" />                
+                <br/><br/>
+                <center>
+                    <p:commandButton update="form:table" value="Evet" oncomplete="PF('sil').hide();"
+                                     action="#{kullaniciManagedBean.sil}"/>
+                    <p:commandButton value="Hayır" style="margin-left: 10px;"
+                                     onclick="PF('sil').hide();"/> 
+                </center>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>
+
+
+

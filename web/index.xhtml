@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>   
+        <link href="css/animate.css" rel="stylesheet" type="text/css"/>
+        <title>JSF Project</title>
+    </h:head>
+    <h:body>
+        <h:form>  
+            <table class="outer">
+                <tr>
+                    <td align="center">
+                        <table>
+                            <tr>
+                                <td><h:outputLabel for="tckimlikno" value="Tc Kimlik No:" /></td>
+                                <td>
+                                    <p:inputText id="tckimlikno"
+                                                 value="#{kullaniciManagedBean.tcKimlikNo}" maxlength="11"
+                                                 />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h:outputLabel for="sifre" value="Şifre:" /></td>
+                                <td><p:password id="sifre" value="#{kullaniciManagedBean.sifre}" /></td>
+                            </tr>
+                            <tr>
+                                <td align="center" colspan="2">
+                                    <p:commandButton id="submit" style="color:red"
+                                                     value="Giriş" action="#{kullaniciManagedBean.giris}" ajax="false" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" colspan="2">
+                                    <p:messages id="messages" autoUpdate="true" closable="true" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html lang="tr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>JSF Hibernate</title>
+    </h:head>
+    <h:body>
+        <link href="../css/style.css" rel="stylesheet" type="text/css"/>       
+        <p:layout fullPage="true">
+            <p:layoutUnit styleClass="myLayoutStyleClass" position="north" size="100" 
+                          style="background-image: url(../images/bulut.jpg); background-size:100%; ">
+                <h:form>
+                    <p:toolbarGroup>
+                        <div class="ui-toolbar-group-left">LEFT</div>
+                        <div class="ui-toolbar-group-right">
+                            <center>
+
+                                <p:outputLabel value="Hoşgeldiniz #{kullaniciManagedBean.kullanici.ad} #{kullaniciManagedBean.kullanici.soyad}" />
+                                <p:graphicImage id="myImage" value="#{kullaniciManagedBean.imageKullanici}" height="40" 
+                                                alt="Resim Yok."/>
+                                <br/><br/>
+                                <p:commandButton id="cikisButon"  value="Çıkış" 
+                                                 action="#{kullaniciManagedBean.cikis}" 
+                                                 ajax="false" icon="ui-icon-extlink"/>
+                            </center>
+                        </div>
+                        <div style="margin: 0 auto;width: 60%;"><center>CENTER</center></div>
+                    </p:toolbarGroup>
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="west" size="200" header="Menü" collapsible="true">
+                <h:form>
+                    <p:panelMenu model="#{kullaniciManagedBean.menuModel}"/>
+                    <!--<ui:include src="../templates/themeMenu.xhtml" />-->
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <ui:insert name="content"/>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
