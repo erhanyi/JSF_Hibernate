@@ -13,8 +13,14 @@ import com.erhan.model.Menu;
 import com.erhan.util.MessagesController;
 import com.erhan.validator.TCKimlikNo;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.ExternalContext;
@@ -253,7 +259,7 @@ public class KullaniciManagedBean implements Serializable {
         image = new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents()));
         this.setResimYeni(uploadedFile.getContents());
     }
-    
+
     public void startDownload() throws IOException {
         try {
             FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -264,6 +270,39 @@ public class KullaniciManagedBean implements Serializable {
                 output.write(kullanici.getResim());
             }
             facesContext.responseComplete();
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+
+    public void startUploadDisk(FileUploadEvent event) throws IOException {
+        uploadedFile = event.getFile();
+        Path folder = Paths.get("D://files//");
+        String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
+        String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
+        
+        Path file = Files.createTempFile(folder, filename, "." + extension);
+
+        try (InputStream input = uploadedFile.getInputstream()) {
+            Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
+        }
+      
+        this.setResimAdiYeni(file.getFileName().toString());
+    }
+
+    public void startDownloadDisk() throws IOException {
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesContext.getExternalContext();
+            File file = new File("D://files//" + kullanici.getResimAdi());
+            externalContext.setResponseHeader("Content-Type", externalContext.getMimeType(kullanici.getResimAdi()));
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + kullanici.getResimAdi() + "\"");
+
+            OutputStream output = externalContext.getResponseOutputStream();
+            Files.copy(file.toPath(), output);
+
+            facesContext.responseComplete();
+            
         } catch (IOException e) {
             throw e;
         }
@@ -439,15 +478,14 @@ public class KullaniciManagedBean implements Serializable {
     }
 
     public StreamedContent getImageKullanici() throws IOException {
-        if(kullanici.getResim() != null) {
-        return new DefaultStreamedContent(new ByteArrayInputStream(kullanici.getResim()));
-    }
-    else {
-        return null;
-    }
+        if (kullanici.getResim() != null) {
+            return new DefaultStreamedContent(new ByteArrayInputStream(kullanici.getResim()));
+        } else {
+            return null;
+        }
     }
 
     public void setImageKullanici(StreamedContent imageKullanici) {
         this.imageKullanici = imageKullanici;
-    }    
+    }
 }
