@@ -13,6 +13,12 @@
                          emptyMessage="Liste boştur." >
                 <f:facet name="header">
                     Kullanıcı Listesi
+                    <br/><br/>
+                    <p:commandButton value="Yeni Kullanıcı Ekle" icon="ui-icon-extlink" 
+                                     action="#{kullaniciManagedBean.temizleKullaniciEkle}"
+                                     oncomplete="PF('dlg').show();" update="ekleForm">
+                        <p:resetInput target="ekleForm" />
+                    </p:commandButton>
                 </f:facet>
                 <p:column headerText="TC Kimlik No" style="text-align: center">
                     <p:outputLabel value="#{c.tcKimlikNo}" />
@@ -45,18 +51,13 @@
                         </p:commandButton>
                     </center>
                 </p:column>
-                <f:facet name="footer">
+                <f:facet name="footer">                    
                     Toplam kullanıcı sayısı: #{fn:length(kullaniciManagedBean.kullaniciListesi)}
                 </f:facet>
             </p:dataTable>
             <br/>
             <center>
-                <p:commandButton value="Yeni Kullanıcı Ekle" icon="ui-icon-extlink" 
-                                 action="#{kullaniciManagedBean.temizleKullaniciEkle}"
-                                 oncomplete="PF('dlg').show();" update="ekleForm">
-                    <p:resetInput target="ekleForm" />
-                </p:commandButton>
-                <p:commandButton action="#{kullaniciManagedBean.startDownload}" value="Dosya İndir (Örnek)" ajax="false"/>
+                <p:commandButton action="#{kullaniciManagedBean.startDownloadFromDatabase}" value="Dosya İndir (Örnek)" ajax="false"/>
             </center>
         </h:form>
 

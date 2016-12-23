@@ -129,7 +129,7 @@ public class KullaniciManagedBean implements Serializable {
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('dlg').show();");
         } catch (Exception e) {
-            MessagesController.hataVer("Kullanıcı silme işleminde hata oluştu");
+            MessagesController.hataVer("Kullanıcı düzenleme işleminde hata oluştu");
         }
     }
 
@@ -170,7 +170,7 @@ public class KullaniciManagedBean implements Serializable {
             user.setSoyad(this.getSoyadYeni().toUpperCase());
             user.setResim(this.getResimYeni());
             user.setEmail(this.getEmailYeni());
-            user.setResimAdi(this.getResimAdiYeni());
+            user.setResimAdi(this.getTcKimlikNoYeni());
             kullaniciDao.kaydetObje(user);
             log.debug("Kaydetme : " + user + " kaydedildi.");
             kullaniciListesi.add(user);
@@ -205,7 +205,7 @@ public class KullaniciManagedBean implements Serializable {
     public void handleFileUpload(FileUploadEvent event) {
         uploadedFile = event.getFile();
         String extension = FilenameUtils.getExtension(event.getFile().getFileName());
-        this.setResimAdiYeni(this.getTcKimlikNo() + "." + extension);
+        this.setResimAdiYeni(this.getTcKimlikNoYeni()+ "." + extension);
         image = new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents()));
         this.setResimYeni(uploadedFile.getContents());
     }
@@ -252,7 +252,7 @@ public class KullaniciManagedBean implements Serializable {
     }
 ///////////////////////////////////////////////////////////////////////////////
 
-    public void startUpload(FileUploadEvent event) {
+    public void startUploadToDatabase(FileUploadEvent event) {
         uploadedFile = event.getFile();
         String extension = FilenameUtils.getExtension(event.getFile().getFileName());
         this.setResimAdiYeni(this.getTcKimlikNo() + "." + extension);
@@ -260,7 +260,7 @@ public class KullaniciManagedBean implements Serializable {
         this.setResimYeni(uploadedFile.getContents());
     }
 
-    public void startDownload() throws IOException {
+    public void startDownloadFromDatabase() throws IOException {
         try {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesContext.getExternalContext();
@@ -275,7 +275,7 @@ public class KullaniciManagedBean implements Serializable {
         }
     }
 
-    public void startUploadDisk(FileUploadEvent event) throws IOException {
+    public void startUploadToDisk(FileUploadEvent event) throws IOException {
         uploadedFile = event.getFile();
         Path folder = Paths.get("D://files//");
         String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
@@ -290,7 +290,7 @@ public class KullaniciManagedBean implements Serializable {
         this.setResimAdiYeni(file.getFileName().toString());
     }
 
-    public void startDownloadDisk() throws IOException {
+    public void startDownloadFromDisk() throws IOException {
         try {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesContext.getExternalContext();
