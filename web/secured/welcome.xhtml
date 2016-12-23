@@ -10,15 +10,14 @@
         <h:form id="form">
             <p:messages id="messages" closable="true" autoUpdate="true"/>
             <p:dataTable value="#{kullaniciManagedBean.kullaniciListesi}" var="c" id="table" 
-                         emptyMessage="Liste boştur." >
-                <f:facet name="header">
-                    Kullanıcı Listesi
-                    <br/><br/>
-                    <p:commandButton value="Yeni Kullanıcı Ekle" icon="ui-icon-extlink" 
-                                     action="#{kullaniciManagedBean.temizleKullaniciEkle}"
-                                     oncomplete="PF('dlg').show();" update="ekleForm">
-                        <p:resetInput target="ekleForm" />
-                    </p:commandButton>
+                         emptyMessage="Liste boştur.">
+                <f:facet name="header" id="hee">
+                    <div style="text-align: center">  Kullanıcı Listesi</div>
+                    <div style="text-align: right"><p:commandButton value="Yeni Kullanıcı Ekle" icon="fa-user-plus" 
+                                                                    action="#{kullaniciManagedBean.temizleKullaniciEkle}"
+                                                                    oncomplete="PF('dlg').show();" update="ekleForm">
+                            <p:resetInput target="ekleForm" />
+                        </p:commandButton></div>                    
                 </f:facet>
                 <p:column headerText="TC Kimlik No" style="text-align: center">
                     <p:outputLabel value="#{c.tcKimlikNo}" />
