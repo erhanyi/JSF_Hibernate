@@ -9,6 +9,10 @@
     background: transparent;
 }
 
+.noHeader.ui-datatable table thead tr {
+    display: none;
+}
+
 /****fileupload progressbar görünümü küçültme****/
 .ui-fileupload-content .ui-progressbar {
     width: 40px;

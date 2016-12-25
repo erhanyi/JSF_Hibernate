@@ -1,6 +1,7 @@
 package com.erhan.mb;
 
 import com.erhan.dao.KullaniciDao;
+import com.erhan.model.Araba;
 import java.io.Serializable;
 import java.net.Inet4Address;
 import java.util.List;
@@ -72,6 +73,8 @@ public class KullaniciManagedBean implements Serializable {
     private static List<Menu> menuListesi;
     private MenuModel menuModel;
     private DefaultSubMenu altMenu;
+    
+    private Araba araba;
 
 //    @PostConstruct
 //    public void init() {
@@ -95,6 +98,9 @@ public class KullaniciManagedBean implements Serializable {
                 loggedIn = true;
                 kullanici = kullaniciDao.getirObje(Kullanici.class, kullanici.getTcKimlikNo());
                 kullaniciListesi = kullaniciDao.getirKullaniciListesi();
+                araba=new Araba();
+                araba=kullaniciDao.getirAraba("1");
+                System.out.println(araba.getKullanici().getAd());
                 getirMenu();
                 result = navigationBean.redirectToWelcome();
             } else {
@@ -488,4 +494,12 @@ public class KullaniciManagedBean implements Serializable {
     public void setImageKullanici(StreamedContent imageKullanici) {
         this.imageKullanici = imageKullanici;
     }
+
+    public Araba getAraba() {
+        return araba;
+    }
+
+    public void setAraba(Araba araba) {
+        this.araba = araba;
+    }    
 }

@@ -3,11 +3,17 @@ package com.erhan.model;
 import com.erhan.util.MD5;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "kullanici")
@@ -28,6 +34,9 @@ public class Kullanici implements Serializable {
     private String email;
     @Column(name = "RESIMADI")
     private String resimAdi;
+    @OneToMany(mappedBy = "kullanici", fetch = FetchType.EAGER)
+    @Fetch (FetchMode.SELECT)
+    private List<Araba> arabaListesi=new ArrayList<>();
 
     public String getResimAdi() {
         return resimAdi;
@@ -84,7 +93,15 @@ public class Kullanici implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    public List<Araba> getArabaListesi() {
+        return arabaListesi;
+    }
+
+    public void setArabaListesi(List<Araba> arabaListesi) {
+        this.arabaListesi = arabaListesi;
+    }
+            
     @Override
     public String toString() {
         StringBuilder strBuff = new StringBuilder();

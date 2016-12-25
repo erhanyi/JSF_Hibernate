@@ -1,6 +1,7 @@
 package com.erhan.dao;
 
 import com.erhan.dao.KullaniciDao;
+import com.erhan.model.Araba;
 import com.erhan.model.Kullanici;
 import com.erhan.model.Menu;
 import com.erhan.util.HibernateUtil;
@@ -94,5 +95,21 @@ public class KullaniciDao extends Dao {
         } finally {
             session.close();
         }
+    }
+    
+    public Araba getirAraba(String id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Araba araba;
+        try {
+            session.beginTransaction();
+            araba = (Araba) session.get(Araba.class, id);
+            session.getTransaction().rollback();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+        return araba;
     }
 }

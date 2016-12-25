@@ -13,6 +13,7 @@
   <!-- Mapping files -->
 <!--   <mapping resource="hbm/user.hbm.xml"/> -->
   <mapping class="com.erhan.model.Kullanici"></mapping>
+  <mapping class="com.erhan.model.Araba"></mapping>
   <mapping class="com.erhan.model.Menu"></mapping>
   
 </session-factory>

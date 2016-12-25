@@ -12,7 +12,7 @@
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>glass-x</param-value>
+        <param-value>redmond</param-value>
     </context-param>
 	
     <!-- Welcome File List -->
