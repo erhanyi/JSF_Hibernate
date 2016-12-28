@@ -1,6 +1,7 @@
 package com.erhan.mb;
 
 import com.erhan.dao.KullaniciDao;
+import com.erhan.dao.SelectItemIslem;
 import com.erhan.model.Araba;
 import java.io.Serializable;
 import java.net.Inet4Address;
@@ -23,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -74,6 +76,9 @@ public class KullaniciManagedBean implements Serializable {
     private MenuModel menuModel;
     private DefaultSubMenu altMenu;
     
+    private Date tarih1;
+    private Date tarih2;
+
     private Araba araba;
 
 //    @PostConstruct
@@ -98,8 +103,8 @@ public class KullaniciManagedBean implements Serializable {
                 loggedIn = true;
                 kullanici = kullaniciDao.getirObje(Kullanici.class, kullanici.getTcKimlikNo());
                 kullaniciListesi = kullaniciDao.getirKullaniciListesi();
-                araba=new Araba();
-                araba=kullaniciDao.getirAraba("1");
+                araba = new Araba();
+                araba = kullaniciDao.getirAraba("1");
                 System.out.println(araba.getKullanici().getAd());
                 getirMenu();
                 result = navigationBean.redirectToWelcome();
@@ -110,7 +115,7 @@ public class KullaniciManagedBean implements Serializable {
             MessagesController.hataVer("Kullanıcı kontrol edilirken hata oluştu");
         }
         return result;
-    }
+    }  
 
     public void sil() {
         try {
@@ -211,7 +216,7 @@ public class KullaniciManagedBean implements Serializable {
     public void handleFileUpload(FileUploadEvent event) {
         uploadedFile = event.getFile();
         String extension = FilenameUtils.getExtension(event.getFile().getFileName());
-        this.setResimAdiYeni(this.getTcKimlikNoYeni()+ "." + extension);
+        this.setResimAdiYeni(this.getTcKimlikNoYeni() + "." + extension);
         image = new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents()));
         this.setResimYeni(uploadedFile.getContents());
     }
@@ -286,13 +291,13 @@ public class KullaniciManagedBean implements Serializable {
         Path folder = Paths.get("D://files//");
         String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
         String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
-        
+
         Path file = Files.createTempFile(folder, filename, "." + extension);
 
         try (InputStream input = uploadedFile.getInputstream()) {
             Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
         }
-      
+
         this.setResimAdiYeni(file.getFileName().toString());
     }
 
@@ -308,7 +313,7 @@ public class KullaniciManagedBean implements Serializable {
             Files.copy(file.toPath(), output);
 
             facesContext.responseComplete();
-            
+
         } catch (IOException e) {
             throw e;
         }
@@ -501,5 +506,21 @@ public class KullaniciManagedBean implements Serializable {
 
     public void setAraba(Araba araba) {
         this.araba = araba;
-    }    
+    }
+
+    public Date getTarih1() {
+        return tarih1;
+    }
+
+    public void setTarih1(Date tarih1) {
+        this.tarih1 = tarih1;
+    }
+
+    public Date getTarih2() {
+        return tarih2;
+    }
+
+    public void setTarih2(Date tarih2) {
+        this.tarih2 = tarih2;
+    }   
 }

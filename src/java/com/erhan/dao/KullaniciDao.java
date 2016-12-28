@@ -1,6 +1,5 @@
 package com.erhan.dao;
 
-import com.erhan.dao.KullaniciDao;
 import com.erhan.model.Araba;
 import com.erhan.model.Kullanici;
 import com.erhan.model.Menu;

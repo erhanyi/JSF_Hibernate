@@ -66,7 +66,7 @@
             <br/>
             <center>
                 <p:commandButton action="#{kullaniciManagedBean.startDownloadFromDatabase}" value="Dosya İndir (Örnek)" ajax="false"/>
-            </center>
+            </center>           
         </h:form>
 
         <p:dialog header="Kullanıcı Ekle" widgetVar="dlg" id="dialog">
@@ -74,7 +74,7 @@
                 <p:messages id="msg" autoUpdate="true" closable="true"/>
                 <center>
                     <p:panelGrid columns="2" id="sifreGiris">
-                        <h:outputText value="TC Kimlik No: " />
+                        <p:outputLabel value="TC Kimlik No: " style="display: block; width: 200px;"/>
                         <p:inputText value="#{kullaniciManagedBean.tcKimlikNoYeni}" required="true" 
                                      requiredMessage="Lütfen TC Kimlik Numarası giriniz."
                                      disabled="#{kullaniciManagedBean.gosterGuncelle}"/>
@@ -89,6 +89,17 @@
                         <h:outputText value="E-Posta: " />
                         <p:inputText value="#{kullaniciManagedBean.emailYeni}" required="true" 
                                      requiredMessage="Lütfen email adresinizi giriniz." validator="emailValidator"/>
+
+                        <h:outputText value="Tarih1 " />
+                        <p:calendar id="startDate" value="#{kullaniciManagedBean.tarih1}" 
+                                    pattern ="dd-MM-yyyy" locale="tr">
+                            <p:ajax event="dateSelect" update="tarih2" />
+                        </p:calendar>
+                        <h:outputText value="Tarih2: " />
+                        <p:calendar value="#{kullaniciManagedBean.tarih2}" pattern="dd-MM-yyyy" 
+                                    mindate="#{kullaniciManagedBean.tarih1}" id="tarih2"
+                                    locale="tr"/>
+
                         <h:outputText value="Şifre: " />
                         <p:password id="pwd1" value="#{kullaniciManagedBean.sifreYeni}" feedback="true"
                                     promptLabel="Lütfen şifre giriniz." weakLabel="Zayıf" 
