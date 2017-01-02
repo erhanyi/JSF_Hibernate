@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -14,8 +17,10 @@ import javax.persistence.Table;
 public class Araba implements Serializable {
 
     @Id
-    @Column(name = "arabaid", nullable = false, length = 11)    
-    private String arabaId;
+    @Column(name = "arabaid", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arabaidseq")
+    @SequenceGenerator(name = "arabaidseq", sequenceName = "arabaidseq", allocationSize = 1)
+    private Integer arabaId;
     @Column(name = "arabamarka", nullable = false)
     private String arabaMarka;
     @Column(name = "arabamodel", nullable = false)
@@ -23,14 +28,20 @@ public class Araba implements Serializable {
     @Column(name = "arabarenk", nullable = false)
     private String arabaRenk;
     @ManyToOne
-    @JoinColumn (name = "kullanici")
+    @JoinColumn(name = "kullanici")
     private Kullanici kullanici;
 
-    public String getArabaId() {
+    @Column(name = "dosya")
+    private byte[] dosya;
+
+    @Column(name = "dosyaAdi")
+    private String dosyaAdi;
+
+    public Integer getArabaId() {
         return arabaId;
     }
 
-    public void setArabaId(String arabaId) {
+    public void setArabaId(Integer arabaId) {
         this.arabaId = arabaId;
     }
 
@@ -39,7 +50,11 @@ public class Araba implements Serializable {
     }
 
     public void setArabaMarka(String arabaMarka) {
-        this.arabaMarka = arabaMarka;
+        if (arabaMarka != null) {
+            this.arabaMarka = arabaMarka.toUpperCase();
+        } else {
+            this.arabaMarka = arabaMarka;
+        }
     }
 
     public String getArabaModel() {
@@ -47,7 +62,11 @@ public class Araba implements Serializable {
     }
 
     public void setArabaModel(String arabaModel) {
-        this.arabaModel = arabaModel;
+        if (arabaModel != null) {
+            this.arabaModel = arabaModel.toUpperCase();
+        } else {
+            this.arabaModel = arabaModel;
+        }
     }
 
     public String getArabaRenk() {
@@ -55,7 +74,11 @@ public class Araba implements Serializable {
     }
 
     public void setArabaRenk(String arabaRenk) {
-        this.arabaRenk = arabaRenk;
+        if (arabaRenk != null) {
+            this.arabaRenk = arabaRenk.toUpperCase();
+        } else {
+            this.arabaRenk = arabaRenk;
+        }
     }
 
     public Kullanici getKullanici() {
@@ -65,7 +88,21 @@ public class Araba implements Serializable {
     public void setKullanici(Kullanici kullanici) {
         this.kullanici = kullanici;
     }
-    
-    
-    
+
+    public byte[] getDosya() {
+        return dosya;
+    }
+
+    public void setDosya(byte[] dosya) {
+        this.dosya = dosya;
+    }
+
+    public String getDosyaAdi() {
+        return dosyaAdi;
+    }
+
+    public void setDosyaAdi(String dosyaAdi) {
+        this.dosyaAdi = dosyaAdi;
+    }
+
 }

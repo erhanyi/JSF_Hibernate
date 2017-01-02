@@ -19,12 +19,12 @@
                         <div class="ui-toolbar-group-right">
                             <center>
 
-                                <p:outputLabel value="Hoşgeldiniz #{kullaniciManagedBean.kullanici.ad} #{kullaniciManagedBean.kullanici.soyad}" />
-                                <p:graphicImage id="myImage" value="#{kullaniciManagedBean.imageKullanici}" height="40" 
+                                <p:outputLabel value="Hoşgeldiniz #{sessionMB.kullanici.ad} #{sessionMB.kullanici.soyad}" />
+                                <p:graphicImage id="myImage" value="#{sessionMB.imageKullanici}" height="40" 
                                                 alt="Resim Yok."/>
                                 <br/><br/>
                                 <p:commandButton id="cikisButon"  value="Çıkış" 
-                                                 action="#{kullaniciManagedBean.cikis}" 
+                                                 action="#{sessionMB.cikis}" 
                                                  ajax="false" icon="ui-icon-extlink"/>
                             </center>
                         </div>
@@ -34,7 +34,10 @@
             </p:layoutUnit>
             <p:layoutUnit position="west" size="200" header="Menü" collapsible="true">
                 <h:form>
-                    <p:panelMenu model="#{kullaniciManagedBean.menuModel}"/>
+                    <p:menu style="width: 95%; height: 23px;">
+                        <p:menuitem value="Ana Sayfa" style="color: #e17009; font-weight: bold;" url="welcome.jsf?faces-redirect=true" icon="ui-icon-home"/>
+                    </p:menu>
+                    <p:panelMenu model="#{sessionMB.menuModel}"/>
                     <!--<ui:include src="../templates/themeMenu.xhtml" />-->
                 </h:form>
             </p:layoutUnit>

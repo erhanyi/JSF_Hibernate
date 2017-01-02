@@ -9,7 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.erhan.mb.KullaniciManagedBean;
+import com.erhan.mb.SessionMB;
 
 public class LoginFilter implements Filter {
 
@@ -26,13 +26,13 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // Get the kullaniciManagedBean from session attribute
         request.setCharacterEncoding("UTF-8");
-        KullaniciManagedBean kullaniciManagedBean = (KullaniciManagedBean) ((HttpServletRequest) request).getSession().getAttribute("kullaniciManagedBean");
+        SessionMB sessionMB = (SessionMB) ((HttpServletRequest) request).getSession().getAttribute("sessionMB");
 
         // For the first application request there is no kullaniciManagedBean in the session so user needs to log in
         // For other requests loginBean is present but we need to check if user has logged in successfully
-        if (kullaniciManagedBean == null || !kullaniciManagedBean.isLoggedIn()) {
+        if (sessionMB == null || !sessionMB.isLoggedIn()) {
             String contextPath = ((HttpServletRequest) request).getContextPath();
-            ((HttpServletResponse) response).sendRedirect(contextPath + "/index.jsf");
+            ((HttpServletResponse) response).sendRedirect(contextPath + "/error.jsf");
         }
         chain.doFilter(request, response);
     }

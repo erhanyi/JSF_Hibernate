@@ -1,0 +1,99 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:messages id="msg" autoUpdate="true" closable="true"/>
+            <center>
+                <p:panelGrid columns="2" id="upload">
+                    <p:outputLabel value="Araba Marka: " style="display: block; width: 200px;"/>
+                    <p:inputText value="#{uploadDowloadFileMB.araba.arabaMarka}" required="true" 
+                                 requiredMessage="Lütfen araba markası giriniz."
+                                 style="text-transform: uppercase;"/>
+                    <h:outputText value="Araba Model: " />
+                    <p:inputText value="#{uploadDowloadFileMB.araba.arabaModel}" required="true" 
+                                 requiredMessage="Lütfen araba modeli giriniz."
+                                 style="text-transform: uppercase;"/>
+                    <h:outputText value="Araba Renk " />
+                    <p:inputText value="#{uploadDowloadFileMB.araba.arabaRenk}" required="true" 
+                                 requiredMessage="Lütfen araba renk giriniz."
+                                 style="text-transform: uppercase;"/>     
+                    <h:outputText value="Kullanıcı " />
+                    <p:selectOneMenu value="#{uploadDowloadFileMB.araba.kullanici}" required="true" 
+                                     requiredMessage="Lütfen kullanici seçiniz." converter="#{kullaniciConverter}">
+                        <f:selectItem itemLabel="Seçiniz.." itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{uploadDowloadFileMB.kullaniciListesi}" var="kullanici"
+                                       itemLabel="#{kullanici.ad}" itemValue="#{kullanici}"/>
+                    </p:selectOneMenu>
+                    <p:fileUpload id="choose" label="Dosya Seç" previewWidth="50"                                       
+                                  fileUploadListener="#{uploadDowloadFileMB.startUploadToDatabase}"				
+                                  multiple="false"  allowTypes="/(\.|\/)(gif|jpe?g|png|doc|docx|xls|xlsx|pdf)$/" auto="true"
+                                  mode="advanced" sizeLimit="10240000" update="dosyaAdi"
+                                  invalidFileMessage="Yüklemeye çalıştığınız dosya türü yüklenemez." />    
+                    <h:outputText value="#{uploadDowloadFileMB.araba.dosyaAdi}" id="dosyaAdi"/>
+                </p:panelGrid>
+            </center>
+            <br/>
+            <center>
+                <p:commandButton id="kaydetButon" value="Kaydet" 
+                                 actionListener="#{uploadDowloadFileMB.kaydetAraba}" update="tableForm:table, form:upload"/> 
+                <p:commandButton id="temizleButon" value="Temizle" 
+                                 actionListener="#{uploadDowloadFileMB.temizleAraba}"/>
+            </center>
+            <br/>
+        </h:form>
+        <h:form id="tableForm">
+            <p:dataTable value="#{uploadDowloadFileMB.arabaListesi}" var="araba" id="table" 
+                         emptyMessage="Liste boştur.">
+                <f:facet name="header" id="hee">
+                    <div style="text-align: center">  Araba Listesi</div>                                       
+                </f:facet>
+                <p:column headerText="Araba Marka" style="text-align: center; width: 100px">
+                    <p:outputLabel value="#{araba.arabaMarka}" />
+                </p:column>
+                <p:column headerText="Araba Model" style="text-align: center">                   
+                    <p:outputLabel value="#{araba.arabaModel}" />
+                </p:column>
+                <p:column headerText="Araba Renk" style="text-align: center">                   
+                    <p:outputLabel value="#{araba.arabaRenk}" />
+                </p:column> 
+                <p:column>
+                    <center>
+                        <p:commandButton value="Dosya İndir" action="#{uploadDowloadFileMB.startDownloadFromDatabase}" 
+                                         icon="ui-icon-pencil" ajax="false">
+                            <f:setPropertyActionListener value="#{araba}" 
+                                                         target="#{uploadDowloadFileMB.secilenAraba}" />
+                        </p:commandButton>
+                        <p:commandButton value="Sil" onclick="PF('sil').show();" icon="ui-icon-trash">
+                            <f:setPropertyActionListener value="#{araba}" 
+                                                         target="#{uploadDowloadFileMB.secilenAraba}" />
+                        </p:commandButton>
+                    </center>
+                </p:column>
+                <f:facet name="footer">                    
+                    Toplam kullanıcı sayısı: #{fn:length(uploadDowloadFileMB.arabaListesi)}
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Araba Sil Onay" widgetVar="sil" resizable="false">
+            <h:form id="silForm">               
+                <p:outputLabel value="Arabayı silmek istediğinize emin misiniz?" />                
+                <br/><br/>
+                <center>
+                    <p:commandButton update="tableForm:table" value="Evet" oncomplete="PF('sil').hide();"
+                                     action="#{uploadDowloadFileMB.sil}"/>
+                    <p:commandButton value="Hayır" style="margin-left: 10px;"
+                                     onclick="PF('sil').hide();"/> 
+                </center>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+
+
+

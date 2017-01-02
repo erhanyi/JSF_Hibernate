@@ -8,12 +8,13 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 
 /**
  *
  * @author Erhan
  */
-public class KullaniciDao extends Dao {
+public class TemelDao extends Dao {
 
     public boolean girisKontrol(Kullanici kullanici) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -95,8 +96,8 @@ public class KullaniciDao extends Dao {
             session.close();
         }
     }
-    
-    public Araba getirAraba(String id) {
+
+    public Araba getirAraba(Integer id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Araba araba;
         try {
@@ -110,5 +111,38 @@ public class KullaniciDao extends Dao {
             session.close();
         }
         return araba;
+    }
+
+    public List<Araba> getirArabaListesi() throws Exception {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Araba> arabaListesi;
+        try {
+            session.beginTransaction();
+            arabaListesi = session.createCriteria(Araba.class).list();
+            session.getTransaction().rollback();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+        return arabaListesi;
+    }
+
+    public Long getirKullaniciSayisi() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Long kullaniciSayisi;
+        try {
+            session.beginTransaction();
+            kullaniciSayisi = (Long) session.createCriteria(Kullanici.class)
+                    .setProjection(Projections.rowCount()).uniqueResult();
+            session.getTransaction().rollback();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+        return kullaniciSayisi;
     }
 }

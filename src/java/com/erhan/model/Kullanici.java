@@ -1,6 +1,7 @@
 package com.erhan.model;
 
 import com.erhan.util.MD5;
+import com.erhan.validator.TCKimlikNo;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,20 +21,21 @@ import org.hibernate.annotations.FetchMode;
 public class Kullanici implements Serializable {
 
     @Id
-    @Column(name = "TCKIMLIKNO", nullable = false, length = 11)    
+    @Column(name = "TCKIMLIKNO", nullable = false, length = 11)  
+    @TCKimlikNo (message = "Geçerli bir TC Kimlik Numarası giriniz.")
     private String tcKimlikNo;
     @Column(name = "AD", nullable = false)
     private String ad;
     @Column(name = "SOYAD", nullable = false)
     private String soyad;
     @Column(name = "SIFRE", nullable = false)
-    private String sifre;
+    private String sifre;    
     @Column(name = "RESIM")
     private byte[] resim;  
     @Column(name = "EMAIL", nullable = false)
     private String email;
     @Column(name = "RESIMADI")
-    private String resimAdi;
+    private String resimAdi;    
     @OneToMany(mappedBy = "kullanici", fetch = FetchType.EAGER)
     @Fetch (FetchMode.SELECT)
     private List<Araba> arabaListesi=new ArrayList<>();
@@ -100,7 +102,7 @@ public class Kullanici implements Serializable {
 
     public void setArabaListesi(List<Araba> arabaListesi) {
         this.arabaListesi = arabaListesi;
-    }
+    }   
             
     @Override
     public String toString() {

@@ -18,18 +18,18 @@
                                 <td><h:outputLabel for="tckimlikno" value="Tc Kimlik No:" /></td>
                                 <td>
                                     <p:inputText id="tckimlikno"
-                                                 value="#{kullaniciManagedBean.tcKimlikNo}" maxlength="11"
+                                                 value="#{sessionMB.kullanici.tcKimlikNo}" maxlength="11"
                                                  />
                                 </td>
                             </tr>
                             <tr>
                                 <td><h:outputLabel for="sifre" value="Şifre:" /></td>
-                                <td><p:password id="sifre" value="#{kullaniciManagedBean.sifre}" /></td>
+                                <td><p:password id="sifre" value="#{sessionMB.kullanici.sifre}" /></td>
                             </tr>
                             <tr>
                                 <td align="center" colspan="2">
                                     <p:commandButton id="submit" style="color:red"
-                                                     value="Giriş" action="#{kullaniciManagedBean.giris}" ajax="false" />
+                                                     value="Giriş" action="#{sessionMB.giris}" ajax="false" />
                                 </td>
                             </tr>
                             <tr>
