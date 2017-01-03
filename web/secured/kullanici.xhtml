@@ -33,7 +33,7 @@
                     <p:dataTable value="#{c.arabaListesi}" var="araba" id="araba" 
                                  emptyMessage="Araba yoktur." styleClass="noHeader">
                         <p:column style="text-align: center">                   
-                            <p:outputLabel value="#{araba.arabaMarka}" />
+                            <p:outputLabel value="#{araba.arabaMarka} #{araba.arabaModel}" />
                         </p:column> 
                     </p:dataTable>
                 </p:column> 
@@ -75,19 +75,19 @@
                 <center>
                     <p:panelGrid columns="2" id="sifreGiris">
                         <p:outputLabel value="TC Kimlik No: " style="display: block; width: 200px;"/>
-                        <p:inputText value="#{kullaniciMB.yeniKullanici.tcKimlikNo}" required="true" 
+                        <p:inputText value="#{kullaniciMB.tcKimlikNo}" required="true" 
                                      requiredMessage="Lütfen TC Kimlik Numarası giriniz."
                                      disabled="#{kullaniciMB.gosterGuncelle}"/>
                         <h:outputText value="Ad: " />
-                        <p:inputText value="#{kullaniciMB.yeniKullanici.ad}" required="true" 
+                        <p:inputText value="#{kullaniciMB.ad}" required="true" 
                                      requiredMessage="Lütfen adınızı giriniz."
                                      style="text-transform: uppercase;"/>
                         <h:outputText value="Soyad: " />
-                        <p:inputText value="#{kullaniciMB.yeniKullanici.soyad}" required="true" 
+                        <p:inputText value="#{kullaniciMB.soyad}" required="true" 
                                      requiredMessage="Lütfen soyadınızı giriniz."
                                      style="text-transform: uppercase;"/>
                         <h:outputText value="E-Posta: " />
-                        <p:inputText value="#{kullaniciMB.yeniKullanici.email}" required="true" 
+                        <p:inputText value="#{kullaniciMB.email}" required="true" 
                                      requiredMessage="Lütfen email adresinizi giriniz." validator="emailValidator"/>
 
                         <h:outputText value="Tarih1 " />
@@ -101,25 +101,25 @@
                                     locale="tr"/>
 
                         <h:outputText value="Şifre: " />
-                        <p:password id="pwd1" value="#{kullaniciMB.sifreYeni}" feedback="true"
+                        <p:password id="pwd1" value="#{kullaniciMB.sifre}" feedback="true"
                                     promptLabel="Lütfen şifre giriniz." weakLabel="Zayıf" 
                                     requiredMessage="Lütfen şifre giriniz."
                                     goodLabel="Orta seviye" strongLabel="Güçlü" match="pwd2" label="Şifre"
                                     required="true" />
                         <h:outputText value="Şifre Tekrar: " />
-                        <p:password id="pwd2" value="#{kullaniciMB.sifre2Yeni}" feedback="true"
+                        <p:password id="pwd2" value="#{kullaniciMB.sifre2}" feedback="true"
                                     promptLabel="Lütfen şifreyi tekrar giriniz." weakLabel="Zayıf" 
                                     requiredMessage="Lütfen şifreyi tekrar giriniz."
                                     goodLabel="Orta seviye" strongLabel="Güçlü" required="true" label="Şifre Tekrar" />	
                         <p:fileUpload id="choose" label="Resim Seç" previewWidth="50"                                       
                                       fileUploadListener="#{kullaniciMB.handleFileUpload}"				
                                       multiple="false"  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" auto="true"
-                                      update="myImage" required="true" mode="advanced" 
+                                      update="myImage" required="true" mode="advanced"  process=""
                                       requiredMessage="Lütfen resim yükleyiniz."/>
-                        <p:graphicImage id="myImage" value="#{imageStreamer.image}" 
+                        <p:graphicImage id="myImage" value="#{sessionMB.image}"                                         
                                         height="100" alt="Resim bulunamadı.">
-                            <f:param name="imageId" value="#{kullaniciMB.yeniKullanici.tcKimlikNo}" />
-                        </p:graphicImage>
+                            
+                        </p:graphicImage>                       
                     </p:panelGrid>
                 </center>
                 <br/>

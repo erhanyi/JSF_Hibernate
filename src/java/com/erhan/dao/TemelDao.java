@@ -15,7 +15,7 @@ import org.hibernate.criterion.Projections;
  * @author Erhan
  */
 public class TemelDao extends Dao {
-
+    
     public boolean girisKontrol(Kullanici kullanici) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         boolean girisKabul = false;
@@ -23,15 +23,15 @@ public class TemelDao extends Dao {
             session.beginTransaction();
             List<Kullanici> objs = session.createCriteria(Kullanici.class)
                     .list();
-
+            
             if ((objs != null) && (objs.size() > 0)) {
-
+                
                 for (Kullanici veritabani : objs) {
                     girisKabul = veritabani.getTcKimlikNo().equals(
                             kullanici.getTcKimlikNo())
                             && veritabani.getSifre().equals(
                                     kullanici.getSifre());
-
+                    
                     if (girisKabul) {
                         return girisKabul;
                     }
@@ -46,7 +46,7 @@ public class TemelDao extends Dao {
         }
         return girisKabul;
     }
-
+    
     public Kullanici getirKullanici(String tcKimlikNo) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Kullanici kullanici;
@@ -62,7 +62,7 @@ public class TemelDao extends Dao {
         }
         return kullanici;
     }
-
+    
     public List<Kullanici> getirKullaniciListesi() throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Kullanici> kullaniciListesi;
@@ -78,7 +78,7 @@ public class TemelDao extends Dao {
         }
         return kullaniciListesi;
     }
-
+    
     public List<Menu> getirMenuListesiUstMenuyeGore(int ustMenuId) throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Menu> menuListesi;
@@ -96,7 +96,7 @@ public class TemelDao extends Dao {
             session.close();
         }
     }
-
+    
     public Araba getirAraba(Integer id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Araba araba;
@@ -112,7 +112,7 @@ public class TemelDao extends Dao {
         }
         return araba;
     }
-
+    
     public List<Araba> getirArabaListesi() throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Araba> arabaListesi;
@@ -128,7 +128,7 @@ public class TemelDao extends Dao {
         }
         return arabaListesi;
     }
-
+    
     public Long getirKullaniciSayisi() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Long kullaniciSayisi;
@@ -144,5 +144,29 @@ public class TemelDao extends Dao {
             session.close();
         }
         return kullaniciSayisi;
+    }
+    
+    public void silKullanici(Kullanici kullanici) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            
+            if (kullanici.getArabaListesi() != null 
+                    && kullanici.getArabaListesi().size() > 0) {
+                
+                for (Araba araba : kullanici.getArabaListesi()) {
+                    session.delete(araba);
+                }
+            }
+            
+            session.delete(kullanici);
+            
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 }

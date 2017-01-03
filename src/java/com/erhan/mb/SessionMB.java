@@ -41,7 +41,7 @@ public class SessionMB implements Serializable {
     private MenuModel menuModel;
     private DefaultSubMenu altMenu;
     private StreamedContent imageKullanici = null;
-    private Long kullaniciSayisi;
+    private StreamedContent image = null;
 
     public String giris() {
         String result = null;
@@ -52,7 +52,6 @@ public class SessionMB implements Serializable {
                         + " giriş yaptı.");
                 loggedIn = true;
                 kullanici = temelDao.getirObje(Kullanici.class, kullanici.getTcKimlikNo());
-                kullaniciSayisi=temelDao.getirKullaniciSayisi();
                 getirMenu();
                 result = navigationBean.redirectToWelcome();
             } else {
@@ -176,15 +175,15 @@ public class SessionMB implements Serializable {
 
     public void setImageKullanici(StreamedContent imageKullanici) {
         this.imageKullanici = imageKullanici;
+    }   
+
+    public StreamedContent getImage() {
+        return image;
     }
 
-    public Long getKullaniciSayisi() {
-        return kullaniciSayisi;
+    public void setImage(StreamedContent image) {
+        this.image = image;
     }
-
-    public void setKullaniciSayisi(Long kullaniciSayisi) {
-        this.kullaniciSayisi = kullaniciSayisi;
-    }
-
-   
+    
+    
 }

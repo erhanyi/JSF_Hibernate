@@ -45,23 +45,29 @@ public class Kullanici implements Serializable {
     }
 
     public void setResimAdi(String resimAdi) {
-        this.resimAdi = resimAdi;
+        if (resimAdi!=null) {
+            this.resimAdi = resimAdi.toLowerCase();
+        }
     } 
 
     public String getAd() {
         return ad;
     }
 
-    public void setAd(String ad) {
-        this.ad = ad;
+    public void setAd(String ad) {        
+        if (ad!=null) {
+            this.ad = ad.toUpperCase();
+        }       
     }
 
     public String getSoyad() {
         return soyad;
     }
 
-    public void setSoyad(String soyad) {
-        this.soyad = soyad;
+    public void setSoyad(String soyad) {        
+        if (soyad!=null) {
+            this.soyad = soyad.toUpperCase();
+        }
     }
 
     public String getTcKimlikNo() {
@@ -93,7 +99,9 @@ public class Kullanici implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (email!=null) {
+            this.email = email.toLowerCase();
+        }
     }
 
     public List<Araba> getArabaListesi() {

@@ -31,7 +31,7 @@ import org.primefaces.model.UploadedFile;
 @ViewScoped
 public class UploadDowloadFileMB implements Serializable {
 
-    private final TemelDao kullaniciDao = new TemelDao();
+    private final TemelDao temelDao = new TemelDao();
 
     @ManagedProperty(value = "#{navigationBean}")
     private NavigationBean navigationBean;
@@ -59,8 +59,8 @@ public class UploadDowloadFileMB implements Serializable {
             documentTypeList.add("image/jpeg"); //JPEG
             documentTypeList.add("image/png"); //PNG
 
-            arabaListesi = kullaniciDao.getirArabaListesi();
-            kullaniciListesi = kullaniciDao.getirKullaniciListesi();
+            arabaListesi = temelDao.getirArabaListesi();
+            kullaniciListesi = temelDao.getirKullaniciListesi();
         } catch (Exception e) {
             MessagesController.hataVer("Sayfa çalışırken hata oluştu.");
         }
@@ -105,8 +105,8 @@ public class UploadDowloadFileMB implements Serializable {
     public void kaydetAraba() {
         try {
 
-            kullaniciDao.kaydetObje(araba);
-            arabaListesi = kullaniciDao.getirArabaListesi();
+            temelDao.kaydetObje(araba);
+            arabaListesi = temelDao.getirArabaListesi();
             temizleAraba();
             MessagesController.bilgiVer("Araba kaydedildi.");
 
@@ -117,7 +117,7 @@ public class UploadDowloadFileMB implements Serializable {
 
     public void sil() {
         try {
-            kullaniciDao.silObje(secilenAraba);
+            temelDao.silObje(secilenAraba);
             arabaListesi.remove(secilenAraba);
             MessagesController.bilgiVer("Araba silinmiştir.");
         } catch (Exception e) {
@@ -198,6 +198,6 @@ public class UploadDowloadFileMB implements Serializable {
     }
 
     public TemelDao getKullaniciDao() {
-        return kullaniciDao;
+        return temelDao;
     }
 }

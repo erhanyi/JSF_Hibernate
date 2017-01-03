@@ -21,6 +21,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -46,9 +47,15 @@ public class KullaniciMB implements Serializable {
     private static final Logger log = Logger.getLogger(KullaniciMB.class);
 
     private Kullanici yeniKullanici = new Kullanici();
-    private String sifreYeni;
-    private String sifre2Yeni;
-    private StreamedContent image=null;
+    private String tcKimlikNo;
+    private String sifre;
+    private String ad;
+    private String soyad;
+    private String sifre2;
+    private byte[] resim;
+    private String email;
+    private String resimAdi;
+    
 
     private UploadedFile uploadedFile;
     private boolean gosterGuncelle;
@@ -71,17 +78,17 @@ public class KullaniciMB implements Serializable {
     public void temizleKullaniciEkle() {
         try {
             gosterGuncelle = false;
-            yeniKullanici.setTcKimlikNo(null);
-            yeniKullanici.setAd(null);
-            yeniKullanici.setSoyad(null);            
-            yeniKullanici.setResim(null);
-            yeniKullanici.setEmail(null);
-            yeniKullanici.setResimAdi(null);
-            this.setSifreYeni(null);
-            this.setSifre2Yeni(null);
-            this.setImage(null);
-            this.setUploadedFile(null);          
-            
+            this.setTcKimlikNo(null);
+            this.setAd(null);
+            this.setSoyad(null);
+            this.setResim(null);
+            this.setEmail(null);
+            this.setResimAdi(null);
+            this.setSifre(null);
+            this.setSifre2(null);
+            sessionMB.setImage(null);
+            this.setUploadedFile(null);
+
         } catch (Exception e) {
             MessagesController.hataVer("Kullanıcı verileri temizlenirken hata oluştu");
         }
@@ -89,7 +96,13 @@ public class KullaniciMB implements Serializable {
 
     public void kaydetKullanici() {
         try {
-            yeniKullanici.setSifre(sifreYeni);
+            yeniKullanici.setTcKimlikNo(this.getTcKimlikNo());
+            yeniKullanici.setAd(this.getAd());
+            yeniKullanici.setSoyad(this.getSoyad());
+            yeniKullanici.setResim(this.getResim());
+            yeniKullanici.setEmail(this.getEmail());
+            yeniKullanici.setResimAdi(this.getResimAdi());            
+            yeniKullanici.setSifre(this.getSifre());
             temelDao.kaydetObje(yeniKullanici);
             log.debug("Kaydetme : " + yeniKullanici + " kaydedildi.");
             kullaniciListesi.add(yeniKullanici);
@@ -104,7 +117,7 @@ public class KullaniciMB implements Serializable {
 
     public void sil() {
         try {
-            temelDao.silObje(secilenKullanici);
+            temelDao.silKullanici(secilenKullanici);
             kullaniciListesi.remove(secilenKullanici);
             MessagesController.bilgiVer("Kullanıcı silinmiştir.");
         } catch (Exception e) {
@@ -115,13 +128,13 @@ public class KullaniciMB implements Serializable {
     public void duzenle() {
         try {
             gosterGuncelle = true;
-            yeniKullanici.setTcKimlikNo(secilenKullanici.getTcKimlikNo());
-            yeniKullanici.setAd(secilenKullanici.getAd());
-            yeniKullanici.setSoyad(secilenKullanici.getSoyad());
-            this.setImage(new DefaultStreamedContent(new ByteArrayInputStream(secilenKullanici.getResim())));
-            yeniKullanici.setResim(secilenKullanici.getResim());
-            yeniKullanici.setEmail(secilenKullanici.getEmail());
-            yeniKullanici.setResimAdi(secilenKullanici.getResimAdi());
+            this.setTcKimlikNo(secilenKullanici.getTcKimlikNo());
+            this.setAd(secilenKullanici.getAd());
+            this.setSoyad(secilenKullanici.getSoyad());
+            sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(secilenKullanici.getResim())));
+            this.setResim(secilenKullanici.getResim());
+            this.setEmail(secilenKullanici.getEmail());
+            this.setResimAdi(secilenKullanici.getResimAdi());
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('dlg').show();");
         } catch (Exception e) {
@@ -131,12 +144,12 @@ public class KullaniciMB implements Serializable {
 
     public void kullaniciGuncelle() {
         try {
-            secilenKullanici.setSifre(yeniKullanici.getSifre());
-            secilenKullanici.setAd(yeniKullanici.getAd());
-            secilenKullanici.setSoyad(yeniKullanici.getSoyad());
-            secilenKullanici.setResim(yeniKullanici.getResim());
-            secilenKullanici.setEmail(yeniKullanici.getEmail());
-            secilenKullanici.setResimAdi(yeniKullanici.getResimAdi());
+            secilenKullanici.setSifre(this.getSifre());
+            secilenKullanici.setAd(this.getAd());
+            secilenKullanici.setSoyad(this.getSoyad());
+            secilenKullanici.setResim(this.getResim());
+            secilenKullanici.setEmail(this.getEmail());
+            secilenKullanici.setResimAdi(this.getResimAdi());
             temelDao.kaydetVeyaGuncelleObje(secilenKullanici);
             log.debug("Güncelleme : " + secilenKullanici + "güncellendi.");
             temizleKullaniciEkle();
@@ -151,9 +164,9 @@ public class KullaniciMB implements Serializable {
     public void handleFileUpload(FileUploadEvent event) {
         uploadedFile = event.getFile();
         String extension = FilenameUtils.getExtension(event.getFile().getFileName());
-        yeniKullanici.setResimAdi(yeniKullanici.getTcKimlikNo() + "." + extension);
-        this.setImage(new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents())));
-        yeniKullanici.setResim(uploadedFile.getContents());
+        this.setResimAdi(this.getTcKimlikNo() + "." + extension);
+        sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents())));
+        this.setResim(uploadedFile.getContents());
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,7 +174,7 @@ public class KullaniciMB implements Serializable {
         uploadedFile = event.getFile();
         String extension = FilenameUtils.getExtension(event.getFile().getFileName());
         yeniKullanici.setResimAdi(sessionMB.getKullanici().getTcKimlikNo() + "." + extension);
-        this.setImage(new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents())));
+        sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents())));
         yeniKullanici.setResim(uploadedFile.getContents());
     }
 
@@ -286,28 +299,67 @@ public class KullaniciMB implements Serializable {
         this.araba = araba;
     }
 
-    public String getSifreYeni() {
-        return sifreYeni;
+    public String getTcKimlikNo() {
+        return tcKimlikNo;
     }
 
-    public void setSifreYeni(String sifreYeni) {
-        this.sifreYeni = sifreYeni;
+    public void setTcKimlikNo(String tcKimlikNo) {
+        this.tcKimlikNo = tcKimlikNo;
     }
 
-    public String getSifre2Yeni() {
-        return sifre2Yeni;
+    public String getSifre() {
+        return sifre;
     }
 
-    public void setSifre2Yeni(String sifre2Yeni) {
-        this.sifre2Yeni = sifre2Yeni;
+    public void setSifre(String sifre) {
+        this.sifre = sifre;
     }
 
-    public StreamedContent getImage() {
-        return image;
+    public String getAd() {
+        return ad;
     }
 
-    public void setImage(StreamedContent image) {
-        this.image = image;
+    public void setAd(String ad) {
+        this.ad = ad;
     }
 
+    public String getSoyad() {
+        return soyad;
+    }
+
+    public void setSoyad(String soyad) {
+        this.soyad = soyad;
+    }
+
+    public String getSifre2() {
+        return sifre2;
+    }
+
+    public void setSifre2(String sifre2) {
+        this.sifre2 = sifre2;
+    }
+
+    public byte[] getResim() {
+        return resim;
+    }
+
+    public void setResim(byte[] resim) {
+        this.resim = resim;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getResimAdi() {
+        return resimAdi;
+    }
+
+    public void setResimAdi(String resimAdi) {
+        this.resimAdi = resimAdi;
+    }   
 }
