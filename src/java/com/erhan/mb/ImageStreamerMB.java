@@ -14,7 +14,7 @@ import org.primefaces.model.StreamedContent;
 
 @ManagedBean
 @RequestScoped
-public class ImageStreamer implements Serializable {
+public class ImageStreamerMB implements Serializable {
 
     private final TemelDao kullaniciDao = new TemelDao();
 

@@ -9,13 +9,13 @@
     <ui:define name="content">
         <h:form id="form">
             <p:messages id="messages" closable="true" autoUpdate="true"/>
-            <p:dataTable value="#{kullaniciMB.kullaniciListesi}" var="c" id="table" 
+            <p:dataTable value="#{kullaniciIslemMB.kullaniciListesi}" var="c" id="table" 
                          emptyMessage="Liste boştur.">
                 <f:facet name="header" id="hee">
                     <div style="text-align: center">  Kullanıcı Listesi</div>
                     <div style="text-align: right">
                         <p:commandButton value="Yeni Kullanıcı Ekle" icon="fa-user-plus" 
-                                         action="#{kullaniciMB.temizleKullaniciEkle}"
+                                         action="#{kullaniciIslemMB.temizleKullaniciEkle}"
                                          oncomplete="PF('dlg').show();" update="ekleForm">
                             <p:resetInput target="ekleForm" />
                         </p:commandButton></div>                    
@@ -39,7 +39,7 @@
                 </p:column> 
                 <p:column headerText="Fotoğraf" style="text-align: center; width: 80px;">
                     <center>
-                        <p:graphicImage id="myImage" value="#{imageStreamer.image}" 
+                        <p:graphicImage id="myImage" value="#{imageStreamerMB.image}" 
                                         height="100" alt="Resim bulunamadı.">
                             <f:param name="imageId" value="#{c.tcKimlikNo}" />
                         </p:graphicImage>
@@ -47,25 +47,25 @@
                 </p:column>
                 <p:column>
                     <center>
-                        <p:commandButton value="Düzenle" action="#{kullaniciMB.duzenle}" 
+                        <p:commandButton value="Düzenle" action="#{kullaniciIslemMB.duzenle}" 
                                          icon="ui-icon-pencil" update="ekleForm">
                             <f:setPropertyActionListener value="#{c}" 
-                                                         target="#{kullaniciMB.secilenKullanici}" />
+                                                         target="#{kullaniciIslemMB.secilenKullanici}" />
                             <p:resetInput target="ekleForm" />
                         </p:commandButton>
                         <p:commandButton value="Sil" onclick="PF('sil').show();" icon="ui-icon-trash">
                             <f:setPropertyActionListener value="#{c}" 
-                                                         target="#{kullaniciMB.secilenKullanici}" />
+                                                         target="#{kullaniciIslemMB.secilenKullanici}" />
                         </p:commandButton>
                     </center>
                 </p:column>
                 <f:facet name="footer">                    
-                    Toplam kullanıcı sayısı: #{fn:length(kullaniciMB.kullaniciListesi)}
+                    Toplam kullanıcı sayısı: #{fn:length(kullaniciIslemMB.kullaniciListesi)}
                 </f:facet>
             </p:dataTable>
             <br/>
             <center>
-                <p:commandButton action="#{kullaniciMB.startDownloadFromDatabase}" value="Dosya İndir (Örnek)" ajax="false"/>
+                <p:commandButton action="#{kullaniciIslemMB.startDownloadFromDatabase}" value="Dosya İndir (Örnek)" ajax="false"/>
             </center>           
         </h:form>
 
@@ -75,44 +75,44 @@
                 <center>
                     <p:panelGrid columns="2" id="sifreGiris">
                         <p:outputLabel value="TC Kimlik No: " style="display: block; width: 200px;"/>
-                        <p:inputText value="#{kullaniciMB.tcKimlikNo}" required="true" 
+                        <p:inputText value="#{kullaniciIslemMB.tcKimlikNo}" required="true" 
                                      requiredMessage="Lütfen TC Kimlik Numarası giriniz."
-                                     disabled="#{kullaniciMB.gosterGuncelle}"/>
+                                     disabled="#{kullaniciIslemMB.gosterGuncelle}"/>
                         <h:outputText value="Ad: " />
-                        <p:inputText value="#{kullaniciMB.ad}" required="true" 
+                        <p:inputText value="#{kullaniciIslemMB.ad}" required="true" 
                                      requiredMessage="Lütfen adınızı giriniz."
                                      style="text-transform: uppercase;"/>
                         <h:outputText value="Soyad: " />
-                        <p:inputText value="#{kullaniciMB.soyad}" required="true" 
+                        <p:inputText value="#{kullaniciIslemMB.soyad}" required="true" 
                                      requiredMessage="Lütfen soyadınızı giriniz."
                                      style="text-transform: uppercase;"/>
                         <h:outputText value="E-Posta: " />
-                        <p:inputText value="#{kullaniciMB.email}" required="true" 
+                        <p:inputText value="#{kullaniciIslemMB.email}" required="true" 
                                      requiredMessage="Lütfen email adresinizi giriniz." validator="emailValidator"/>
 
                         <h:outputText value="Tarih1 " />
-                        <p:calendar id="startDate" value="#{kullaniciMB.tarih1}" 
+                        <p:calendar id="startDate" value="#{kullaniciIslemMB.tarih1}" 
                                     pattern ="dd-MM-yyyy" locale="tr">
                             <p:ajax event="dateSelect" update="tarih2" />
                         </p:calendar>
                         <h:outputText value="Tarih2: " />
-                        <p:calendar value="#{kullaniciMB.tarih2}" pattern="dd-MM-yyyy" 
-                                    mindate="#{kullaniciMB.tarih1}" id="tarih2"
+                        <p:calendar value="#{kullaniciIslemMB.tarih2}" pattern="dd-MM-yyyy" 
+                                    mindate="#{kullaniciIslemMB.tarih1}" id="tarih2"
                                     locale="tr"/>
 
                         <h:outputText value="Şifre: " />
-                        <p:password id="pwd1" value="#{kullaniciMB.sifre}" feedback="true"
+                        <p:password id="pwd1" value="#{kullaniciIslemMB.sifre}" feedback="true"
                                     promptLabel="Lütfen şifre giriniz." weakLabel="Zayıf" 
                                     requiredMessage="Lütfen şifre giriniz."
                                     goodLabel="Orta seviye" strongLabel="Güçlü" match="pwd2" label="Şifre"
                                     required="true" />
                         <h:outputText value="Şifre Tekrar: " />
-                        <p:password id="pwd2" value="#{kullaniciMB.sifre2}" feedback="true"
+                        <p:password id="pwd2" value="#{kullaniciIslemMB.sifre2}" feedback="true"
                                     promptLabel="Lütfen şifreyi tekrar giriniz." weakLabel="Zayıf" 
                                     requiredMessage="Lütfen şifreyi tekrar giriniz."
                                     goodLabel="Orta seviye" strongLabel="Güçlü" required="true" label="Şifre Tekrar" />	
                         <p:fileUpload id="choose" label="Resim Seç" previewWidth="50"                                       
-                                      fileUploadListener="#{kullaniciMB.handleFileUpload}"				
+                                      fileUploadListener="#{kullaniciIslemMB.handleFileUpload}"				
                                       multiple="false"  allowTypes="/(\.|\/)(gif|jpe?g|png)$/" auto="true"
                                       update="myImage" required="true" mode="advanced"  process=""
                                       requiredMessage="Lütfen resim yükleyiniz."/>
@@ -125,15 +125,15 @@
                 <br/>
                 <center>
                     <p:commandButton id="kaydetButon" update="form:table, ekleForm" value="Kaydet" 
-                                     actionListener="#{kullaniciMB.kaydetKullanici}"
-                                     rendered="#{!kullaniciMB.gosterGuncelle}"
+                                     actionListener="#{kullaniciIslemMB.kaydetKullanici}"
+                                     rendered="#{!kullaniciIslemMB.gosterGuncelle}"
                                      />
                     <p:commandButton id="guncelleButon" update="form:table, ekleForm" value="Güncelle" 
-                                     actionListener="#{kullaniciMB.kullaniciGuncelle}"
-                                     rendered="#{kullaniciMB.gosterGuncelle}"
+                                     actionListener="#{kullaniciIslemMB.kullaniciGuncelle}"
+                                     rendered="#{kullaniciIslemMB.gosterGuncelle}"
                                      />
                     <p:commandButton id="kapatButon" value="Kapat" style="margin-left: 10px;"
-                                     actionListener="#{kullaniciMB.temizleKullaniciEkle()}"
+                                     actionListener="#{kullaniciIslemMB.temizleKullaniciEkle()}"
                                      update="form:table, ekleForm" oncomplete="PF('dlg').hide();"
                                      process="@this"/>
                 </center>
@@ -146,7 +146,7 @@
                 <br/><br/>
                 <center>
                     <p:commandButton update="form:table" value="Evet" oncomplete="PF('sil').hide();"
-                                     action="#{kullaniciMB.sil}"/>
+                                     action="#{kullaniciIslemMB.sil}"/>
                     <p:commandButton value="Hayır" style="margin-left: 10px;"
                                      onclick="PF('sil').hide();"/> 
                 </center>

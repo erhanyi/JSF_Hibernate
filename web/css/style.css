@@ -9,8 +9,15 @@
     background: transparent;
 }
 
+/*** primefaces datatable başlık kısmını kaldırmak için****/
 .noHeader.ui-datatable table thead tr {
     display: none;
+}
+
+/*** primefaces panel grid kenarlık kaldırmak için****/
+.companyHeaderGrid.ui-panelgrid>*>tr,
+.companyHeaderGrid.ui-panelgrid .ui-panelgrid-cell {
+    border: none;
 }
 
 /****fileupload progressbar görünümü küçültme****/

@@ -35,7 +35,7 @@
             <p:layoutUnit position="west" size="200" header="Menü" collapsible="true">
                 <h:form>
                     <p:menu style="width: 95%; height: 23px;">
-                        <p:menuitem value="Ana Sayfa" style="color: #e17009; font-weight: bold;" url="welcome.jsf?faces-redirect=true" icon="ui-icon-home"/>
+                        <p:menuitem value="Ana Sayfa" style="color: #e17009; font-weight: bold;" action="#{navigationBean.redirectToWelcome}" icon="ui-icon-home"/>
                     </p:menu>
                     <p:panelMenu model="#{sessionMB.menuModel}"/>
                     <!--<ui:include src="../templates/themeMenu.xhtml" />-->
@@ -46,7 +46,7 @@
             </p:layoutUnit>
             <p:layoutUnit position="south" size="30">
                 <center>
-                    <p:outputLabel value="Copyright bla bla" />
+                    <p:outputLabel value="Bu sayfalar en iyi Internet Explorer 9, Firefox 12 tarayıcısında ve en az 1024*768 ekran çözünürlüğünde görüntülenir." />
                 </center>
             </p:layoutUnit>
         </p:layout>

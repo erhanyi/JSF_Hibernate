@@ -1,0 +1,53 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:messages id="messages" closable="true" autoUpdate="true"/>
+            <center>
+                <p:commandButton value="Carousel Aç" onclick="PF('carousel').show();" icon="ui-icon-trash"/>
+                <p:carousel value="#{carouselMB.arabaListesi}" headerText="Araba Listesi" var="araba" 
+                            itemStyle="text-align:center; border:0px; height:80%;" numVisible="1" 
+                            style="width:99%">
+                    <h:panelGrid columns="2" style="width:100%" columnClasses="label,value">
+                        <f:facet name="header">
+                            <h:outputText value="#{araba.arabaMarka}" /> 
+                        </f:facet>
+                        <h:outputText value="Araba Model:" />
+                        <h:outputText value="#{araba.arabaModel}" />         
+                    </h:panelGrid>
+                </p:carousel>
+            </center>
+        </h:form>    
+
+        <p:dialog widgetVar="carousel" width="1000px" height="600px" modal="true" styleClass="customDialog"
+                  closeOnEscape="true" closable="true" appendTo="@(body)">
+            <h:form id="denemeForm">               
+                <center>
+                    <p:carousel value="#{carouselMB.arabaListesi}" var="araba" 
+                                headerText="Araba Listesi (#{fn:length(carouselMB.arabaListesi)} Adet)" 
+                                itemStyle="text-align:center; border:0px; height:89%;" numVisible="1" 
+                                style="width:99%">
+                        <p:panelGrid columns="1" style="width:100%" styleClass="companyHeaderGrid" 
+                                     columnClasses="label,value">
+                            <h:outputText value="#{araba.arabaMarka}" />
+                            <h:outputText value="Araba Model:" />
+                            <h:outputText value="#{araba.arabaModel}" /> 
+                            <p:separator style="width:100%;height:15px" />
+                            <br/>
+                            <h:outputText value="Araba Renk:" />
+                            <h:outputText value="#{araba.arabaRenk}" />                             
+                        </p:panelGrid>
+                    </p:carousel>
+                </center>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+
+
+

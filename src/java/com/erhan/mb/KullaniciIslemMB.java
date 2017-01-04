@@ -37,14 +37,14 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class KullaniciMB implements Serializable {
+public class KullaniciIslemMB implements Serializable {
 
     private final TemelDao temelDao = new TemelDao();
 
     @ManagedProperty(value = "#{sessionMB}")
     private SessionMB sessionMB;
 
-    private static final Logger log = Logger.getLogger(KullaniciMB.class);
+    private static final Logger log = Logger.getLogger(KullaniciIslemMB.class);
 
     private Kullanici yeniKullanici = new Kullanici();
     private String tcKimlikNo;

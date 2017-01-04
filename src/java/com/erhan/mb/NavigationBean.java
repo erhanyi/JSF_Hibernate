@@ -19,9 +19,9 @@ public class NavigationBean implements Serializable {
 
     public String toError() {return "/error.jsf";}
 
-    public String redirectToWelcome() {return "/secured/welcome.jsf?faces-redirect=true";}
+    public String redirectToWelcome() {return "/secured/anasayfa.jsf?faces-redirect=true";}
 
-    public String toWelcome() {return "/secured/welcome.jsf";}
+    public String toWelcome() {return "/secured/anasayfa.jsf";}
     
-    public String redirectToKullanici() {return "/secured/kullanici.jsf?faces-redirect=true";}
+    public String redirectToKullanici() {return "/secured/kullaniciIslem.jsf?faces-redirect=true";}
 }
