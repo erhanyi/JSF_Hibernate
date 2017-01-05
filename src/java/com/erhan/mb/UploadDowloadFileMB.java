@@ -7,8 +7,14 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import com.erhan.util.MessagesController;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -97,6 +103,39 @@ public class UploadDowloadFileMB implements Serializable {
             }
             facesContext.responseComplete();
             //    System.gc();
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+    
+    public void startUploadToDisk(FileUploadEvent event) throws IOException {
+        uploadedFile = event.getFile();
+        Path folder = Paths.get("D://files//");
+        String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
+        String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
+
+        Path file = Files.createTempFile(folder, filename, "." + extension);
+
+        try (InputStream input = uploadedFile.getInputstream()) {
+            Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        araba.setDosyaAdi(file.getFileName().toString());
+    }
+
+    public void startDownloadFromDisk() throws IOException {
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesContext.getExternalContext();
+            File file = new File("D://files//" + secilenAraba.getDosyaAdi());
+            externalContext.setResponseHeader("Content-Type", externalContext.getMimeType(secilenAraba.getDosyaAdi()));
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + secilenAraba.getDosyaAdi() + "\"");
+
+            OutputStream output = externalContext.getResponseOutputStream();
+            Files.copy(file.toPath(), output);
+
+            facesContext.responseComplete();
+
         } catch (IOException e) {
             throw e;
         }

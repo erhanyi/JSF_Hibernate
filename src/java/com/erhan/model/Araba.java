@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "araba")
-public class Araba implements Serializable {
+public class Araba implements Serializable, Comparable<Araba> {
 
     @Id
     @Column(name = "arabaid", nullable = false)
@@ -36,6 +36,11 @@ public class Araba implements Serializable {
 
     @Column(name = "dosyaAdi")
     private String dosyaAdi;
+
+    @Override
+    public int compareTo(Araba o) {
+        return arabaMarka.compareTo(o.getArabaMarka());
+    }
 
     public Integer getArabaId() {
         return arabaId;

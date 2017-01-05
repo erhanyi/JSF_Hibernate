@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -65,6 +66,7 @@ public class SessionMB implements Serializable {
 
     public String cikis() {
         try {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             System.gc();
             return navigationBean.redirectToLogin();
         } catch (Exception e) {

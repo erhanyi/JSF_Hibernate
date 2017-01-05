@@ -14,7 +14,7 @@
                 <f:facet name="header" id="hee">
                     <div style="text-align: center">  Kullanıcı Listesi</div>
                     <div style="text-align: right">
-                        <p:commandButton value="Yeni Kullanıcı Ekle" icon="fa-user-plus" 
+                        <p:commandButton value="Yeni Kullanıcı Ekle" icon="fa-plus" 
                                          action="#{kullaniciIslemMB.temizleKullaniciEkle}"
                                          oncomplete="PF('dlg').show();" update="ekleForm">
                             <p:resetInput target="ekleForm" />
@@ -33,7 +33,13 @@
                     <p:dataTable value="#{c.arabaListesi}" var="araba" id="araba" 
                                  emptyMessage="Araba yoktur." styleClass="noHeader">
                         <p:column style="text-align: center">                   
-                            <p:outputLabel value="#{araba.arabaMarka} #{araba.arabaModel}" />
+                            <p:commandLink value="#{araba.arabaMarka} #{araba.arabaModel}"                                             
+                                           onclick="PF('araba').show();"
+                                           id="arabaDetay" update="arabaForm">                            
+                                <f:setPropertyActionListener value="#{araba}" 
+                                                             target="#{kullaniciIslemMB.secilenAraba}" />
+                                <p:resetInput target="ekleForm" />
+                            </p:commandLink>
                         </p:column> 
                     </p:dataTable>
                 </p:column> 
@@ -47,16 +53,21 @@
                 </p:column>
                 <p:column>
                     <center>
-                        <p:commandButton value="Düzenle" action="#{kullaniciIslemMB.duzenle}" 
-                                         icon="ui-icon-pencil" update="ekleForm">
+                        <p:commandLink action="#{kullaniciIslemMB.duzenle}" 
+                                       update="ekleForm" id="duzenle">
+                            <p:graphicImage value="/images/duzenle.png" />
                             <f:setPropertyActionListener value="#{c}" 
                                                          target="#{kullaniciIslemMB.secilenKullanici}" />
                             <p:resetInput target="ekleForm" />
-                        </p:commandButton>
-                        <p:commandButton value="Sil" onclick="PF('sil').show();" icon="ui-icon-trash">
+                        </p:commandLink>
+                        <p:tooltip id="toolTipDuzenle" for="duzenle" value="Düzenle" trackMouse="true"/>
+                        <p:spacer width="10" />
+                        <p:commandLink onclick="PF('sil').show();" id="sil">
+                            <p:graphicImage value="/images/delete.png" />
                             <f:setPropertyActionListener value="#{c}" 
                                                          target="#{kullaniciIslemMB.secilenKullanici}" />
-                        </p:commandButton>
+                        </p:commandLink>
+                        <p:tooltip id="toolTipSil" for="sil" value="Sil" trackMouse="true"/>
                     </center>
                 </p:column>
                 <f:facet name="footer">                    
@@ -118,7 +129,7 @@
                                       requiredMessage="Lütfen resim yükleyiniz."/>
                         <p:graphicImage id="myImage" value="#{sessionMB.image}"                                         
                                         height="100" alt="Resim bulunamadı.">
-                            
+
                         </p:graphicImage>                       
                     </p:panelGrid>
                 </center>
@@ -149,6 +160,16 @@
                                      action="#{kullaniciIslemMB.sil}"/>
                     <p:commandButton value="Hayır" style="margin-left: 10px;"
                                      onclick="PF('sil').hide();"/> 
+                </center>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Araba Detay" widgetVar="araba" resizable="false">
+            <h:form id="arabaForm">               
+                <p:outputLabel value="Araba Hakkında" />                
+                <br/><br/>
+                <center>
+                    <p:outputLabel value="#{kullaniciIslemMB.secilenAraba.arabaModel}"/>
                 </center>
             </h:form>
         </p:dialog>

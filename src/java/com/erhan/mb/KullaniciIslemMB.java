@@ -10,26 +10,15 @@ import org.primefaces.context.RequestContext;
 import com.erhan.model.Kullanici;
 import com.erhan.util.MessagesController;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
+import java.util.Collections;
 
 /**
  * @author ERHAN
@@ -65,11 +54,13 @@ public class KullaniciIslemMB implements Serializable {
     private Date tarih2;
 
     private Araba araba;
+    private Araba secilenAraba;
 
     @PostConstruct
     public void init() {
         try {
             kullaniciListesi = temelDao.getirKullaniciListesi();
+            Collections.sort(kullaniciListesi);
         } catch (Exception e) {
             MessagesController.hataVer("Sayfa çalışırken hata oluştu.");
         }
@@ -167,64 +158,7 @@ public class KullaniciIslemMB implements Serializable {
         this.setResimAdi(this.getTcKimlikNo() + "." + extension);
         sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents())));
         this.setResim(uploadedFile.getContents());
-    }
-
-///////////////////////////////////////////////////////////////////////////////
-    public void startUploadToDatabase(FileUploadEvent event) {
-        uploadedFile = event.getFile();
-        String extension = FilenameUtils.getExtension(event.getFile().getFileName());
-        yeniKullanici.setResimAdi(sessionMB.getKullanici().getTcKimlikNo() + "." + extension);
-        sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents())));
-        yeniKullanici.setResim(uploadedFile.getContents());
-    }
-
-    public void startDownloadFromDatabase() throws IOException {
-        try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesContext.getExternalContext();
-            externalContext.setResponseHeader("Content-Type", externalContext.getMimeType(sessionMB.getKullanici().getResimAdi()));
-            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + sessionMB.getKullanici().getResimAdi() + "\"");
-            try (OutputStream output = externalContext.getResponseOutputStream()) {
-                output.write(sessionMB.getKullanici().getResim());
-            }
-            facesContext.responseComplete();
-        } catch (IOException e) {
-            throw e;
-        }
-    }
-
-    public void startUploadToDisk(FileUploadEvent event) throws IOException {
-        uploadedFile = event.getFile();
-        Path folder = Paths.get("D://files//");
-        String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
-        String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
-
-        Path file = Files.createTempFile(folder, filename, "." + extension);
-
-        try (InputStream input = uploadedFile.getInputstream()) {
-            Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        yeniKullanici.setResimAdi(file.getFileName().toString());
-    }
-
-    public void startDownloadFromDisk() throws IOException {
-        try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesContext.getExternalContext();
-            File file = new File("D://files//" + sessionMB.getKullanici().getResimAdi());
-            externalContext.setResponseHeader("Content-Type", externalContext.getMimeType(sessionMB.getKullanici().getResimAdi()));
-            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + sessionMB.getKullanici().getResimAdi() + "\"");
-
-            OutputStream output = externalContext.getResponseOutputStream();
-            Files.copy(file.toPath(), output);
-
-            facesContext.responseComplete();
-
-        } catch (IOException e) {
-            throw e;
-        }
-    }
+    }  
 
 ///////////////////// Getter ve Setter ////////////////////////////////////////
     public SessionMB getSessionMB() {
@@ -361,5 +295,13 @@ public class KullaniciIslemMB implements Serializable {
 
     public void setResimAdi(String resimAdi) {
         this.resimAdi = resimAdi;
+    }   
+
+    public Araba getSecilenAraba() {
+        return secilenAraba;
+    }
+
+    public void setSecilenAraba(Araba secilenAraba) {
+        this.secilenAraba = secilenAraba;
     }   
 }

@@ -20,7 +20,6 @@ public class TemelDao extends Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         boolean girisKabul = false;
         try {
-            session.beginTransaction();
             List<Kullanici> objs = session.createCriteria(Kullanici.class)
                     .list();
             
@@ -37,9 +36,7 @@ public class TemelDao extends Dao {
                     }
                 }
             }
-            session.getTransaction().rollback();
         } catch (Exception e) {
-            session.getTransaction().rollback();
             throw e;
         } finally {
             session.close();
@@ -51,11 +48,10 @@ public class TemelDao extends Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Kullanici kullanici;
         try {
-            session.beginTransaction();
+            
             kullanici = (Kullanici) session.get(Kullanici.class, tcKimlikNo);
-            session.getTransaction().rollback();
+
         } catch (Exception e) {
-            session.getTransaction().rollback();
             throw e;
         } finally {
             session.close();
@@ -67,11 +63,10 @@ public class TemelDao extends Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Kullanici> kullaniciListesi;
         try {
-            session.beginTransaction();
+            
             kullaniciListesi = session.createCriteria(Kullanici.class).list();
-            session.getTransaction().rollback();
+            
         } catch (HibernateException e) {
-            session.getTransaction().rollback();
             throw e;
         } finally {
             session.close();
@@ -83,14 +78,11 @@ public class TemelDao extends Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Menu> menuListesi;
         try {
-            session.beginTransaction();
             Query query = session.createQuery("from Menu where ustMenuId = :ustMenuId ");
             query.setParameter("ustMenuId", ustMenuId);
             menuListesi = query.list();
-            session.getTransaction().rollback();
             return menuListesi;
         } catch (Exception e) {
-            session.getTransaction().rollback();
             throw e;
         } finally {
             session.close();
@@ -101,11 +93,10 @@ public class TemelDao extends Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Araba araba;
         try {
-            session.beginTransaction();
+            
             araba = (Araba) session.get(Araba.class, id);
-            session.getTransaction().rollback();
+            
         } catch (Exception e) {
-            session.getTransaction().rollback();
             throw e;
         } finally {
             session.close();
@@ -117,11 +108,10 @@ public class TemelDao extends Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Araba> arabaListesi;
         try {
-            session.beginTransaction();
+
             arabaListesi = session.createCriteria(Araba.class).list();
-            session.getTransaction().rollback();
-        } catch (HibernateException e) {
-            session.getTransaction().rollback();
+
+        } catch (HibernateException e) {            
             throw e;
         } finally {
             session.close();
@@ -133,12 +123,9 @@ public class TemelDao extends Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Long kullaniciSayisi;
         try {
-            session.beginTransaction();
             kullaniciSayisi = (Long) session.createCriteria(Kullanici.class)
                     .setProjection(Projections.rowCount()).uniqueResult();
-            session.getTransaction().rollback();
         } catch (Exception e) {
-            session.getTransaction().rollback();
             throw e;
         } finally {
             session.close();

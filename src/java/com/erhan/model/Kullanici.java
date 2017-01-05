@@ -4,8 +4,7 @@ import com.erhan.util.MD5;
 import com.erhan.validator.TCKimlikNo;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.SortedSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +12,14 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.cxf.common.util.SortedArraySet;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.SortNatural;
 
 @Entity
 @Table(name = "kullanici")
-public class Kullanici implements Serializable {
+public class Kullanici implements Serializable, Comparable<Kullanici> {
 
     @Id
     @Column(name = "TCKIMLIKNO", nullable = false, length = 11)  
@@ -38,8 +39,14 @@ public class Kullanici implements Serializable {
     private String resimAdi;    
     @OneToMany(mappedBy = "kullanici", fetch = FetchType.EAGER)
     @Fetch (FetchMode.SELECT)
-    private List<Araba> arabaListesi=new ArrayList<>();
+    @SortNatural
+    private SortedSet<Araba> arabaListesi=new SortedArraySet<>();
 
+    @Override
+    public int compareTo(Kullanici o) {
+        return tcKimlikNo.compareTo(o.getTcKimlikNo());
+    }
+    
     public String getResimAdi() {
         return resimAdi;
     }
@@ -104,13 +111,13 @@ public class Kullanici implements Serializable {
         }
     }
 
-    public List<Araba> getArabaListesi() {
+    public SortedSet<Araba> getArabaListesi() {
         return arabaListesi;
     }
 
-    public void setArabaListesi(List<Araba> arabaListesi) {
+    public void setArabaListesi(SortedSet<Araba> arabaListesi) {
         this.arabaListesi = arabaListesi;
-    }   
+    }     
             
     @Override
     public String toString() {

@@ -88,11 +88,8 @@ public abstract class Dao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         T result;
         try {
-            session.beginTransaction();
             result = c.cast(session.get(c, id));
-            session.getTransaction().rollback();
         } catch (Exception e) {
-            session.getTransaction().rollback();
             throw e;
         } finally {
             session.close();
