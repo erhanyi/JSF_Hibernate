@@ -1,0 +1,53 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:messages id="messages" closable="true" autoUpdate="true"/>
+            <center>
+
+                <p:selectOneMenu id="arabalar" value="#{selectionDataTableMB.secilenAraba}"
+                                 converter="#{arabaConverter}" style="width:150px">
+                    <p:ajax listener="#{selectionDataTableMB.secAraba}" update="table" />
+                    <f:selectItem itemLabel="Seçiniz.." itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{selectionDataTableMB.arabaListesi}" var="ara" 
+                                   itemLabel="#{ara.arabaMarka} #{ara.arabaModel}" itemValue="#{ara}"/>
+                </p:selectOneMenu>
+
+                <p:dataTable value="#{selectionDataTableMB.arabaListesi}" var="araba" id="table" 
+                             emptyMessage="Liste boştur." selection="#{selectionDataTableMB.secilenArabaListesi}"
+                             rowKey="#{araba.arabaId}" rowSelectMode="false">
+                    <f:facet name="header" id="hee">
+                        <div style="text-align: center">  Araba Listesi</div>                                       
+                    </f:facet>
+                    <p:ajax event="toggleSelect" listener="#{selectionDataTableMB.toogleSelect}" update="table"/>
+                    <p:ajax event="rowSelectCheckbox"/>
+                    <p:ajax event="rowUnselectCheckbox" listener="#{selectionDataTableMB.onRowUnselect}"
+                            update="table" />
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column headerText="Araba Marka" style="text-align: center; width: 100px">
+                        <p:outputLabel value="#{araba.arabaMarka}" />
+                    </p:column>
+                    <p:column headerText="Araba Model" style="text-align: center">                   
+                        <p:outputLabel value="#{araba.arabaModel}" />
+                    </p:column>
+                    <p:column headerText="Araba Renk" style="text-align: center">                   
+                        <p:outputLabel value="#{araba.arabaRenk}" />
+                    </p:column> 
+                    <f:facet name="footer">                    
+                        Toplam araba sayısı: #{fn:length(selectionDataTableMB.arabaListesi)}
+                    </f:facet>
+                </p:dataTable> 
+            </center>
+        </h:form>    
+
+
+    </ui:define>
+</ui:composition>
+
+
+
