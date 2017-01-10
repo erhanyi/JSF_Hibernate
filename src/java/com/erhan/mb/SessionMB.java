@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -44,6 +46,8 @@ public class SessionMB implements Serializable {
     private StreamedContent imageKullanici = null;
     private StreamedContent image = null;
 
+    private boolean devemEtKontrol=false;
+
     public String giris() {
         String result = null;
         try {
@@ -54,7 +58,13 @@ public class SessionMB implements Serializable {
                 loggedIn = true;
                 kullanici = temelDao.getirObje(Kullanici.class, kullanici.getTcKimlikNo());
                 getirMenu();
-                result = navigationBean.redirectToWelcome();
+
+                if (devemEtKontrol) {
+                    devemEtKontrol=false;
+                    return FacesContext.getCurrentInstance().getViewRoot().getViewId();
+                } else {
+                    result = navigationBean.redirectToWelcome();
+                }
             } else {
                 MessagesController.hataVer("Kullanıcı adı veya şifre hatalı!");
             }
@@ -72,6 +82,15 @@ public class SessionMB implements Serializable {
         } catch (Exception e) {
             MessagesController.hataVer("Çıkış işleminde hata oluştu");
             return null;
+        }
+    }
+
+    public void devamEt() {
+        try {
+            devemEtKontrol=true;
+            giris();
+        } catch (Exception e) {
+            MessagesController.hataVer("Devam etme işleminde hata oluştu");
         }
     }
 
@@ -115,10 +134,9 @@ public class SessionMB implements Serializable {
         }
         return subMenu;
     }
+
 ///////////////////////////////////////////////////////////////////////////////
-
 ///////////////////// Getter ve Setter ////////////////////////////////////////
-
     public NavigationBean getNavigationBean() {
         return navigationBean;
     }
@@ -177,7 +195,7 @@ public class SessionMB implements Serializable {
 
     public void setImageKullanici(StreamedContent imageKullanici) {
         this.imageKullanici = imageKullanici;
-    }   
+    }
 
     public StreamedContent getImage() {
         return image;
@@ -186,6 +204,5 @@ public class SessionMB implements Serializable {
     public void setImage(StreamedContent image) {
         this.image = image;
     }
-    
-    
+
 }
