@@ -1,0 +1,46 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:messages id="messages" closable="true" autoUpdate="true"/>
+            <center>
+                <p:accordionPanel value="#{accordionPanelMB.arabaListesi}" var="araba"
+                                  activeIndex="-1">
+                    <p:tab title="Car - #{araba.arabaId}">
+                        <p:panelGrid columns="2">                                             
+                            <h:outputText value="Brand:" style="font-weight: bold" />
+                            <h:outputText value="#{araba.arabaMarka}" />
+
+                            <h:outputText value="Year:" style="font-weight: bold" />
+                            <h:outputText value="#{araba.arabaModel}" />
+
+                            <h:outputText value="Color:" style="font-weight: bold" />
+                            <h:outputText value="#{araba.arabaRenk}" />
+                        </p:panelGrid>
+                        <p:accordionPanel value="#{araba.arabaListesi}" var="araba1"
+                                          activeIndex="-1">
+                            <p:tab title="Car - #{araba1.arabaId}">
+                                <p:panelGrid columns="2">
+                                    <h:outputText value="Brand:" style="font-weight: bold" />
+                                    <h:outputText value="#{araba1.arabaMarka}" />
+
+                                    <h:outputText value="Year:" style="font-weight: bold" />
+                                    <h:outputText value="#{araba1.arabaModel}" />
+
+                                    <h:outputText value="Color:" style="font-weight: bold" />
+                                    <h:outputText value="#{araba1.arabaRenk}" />
+                                </p:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>                        
+                    </p:tab>
+                </p:accordionPanel>
+            </center> 
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+

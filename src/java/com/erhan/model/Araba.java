@@ -1,6 +1,7 @@
 package com.erhan.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "araba")
@@ -36,6 +38,9 @@ public class Araba implements Serializable, Comparable<Araba> {
 
     @Column(name = "dosyaAdi")
     private String dosyaAdi;
+    
+    @Transient
+    private List<Araba> arabaListesi;
 
     @Override
     public int compareTo(Araba o) {
@@ -108,6 +113,14 @@ public class Araba implements Serializable, Comparable<Araba> {
 
     public void setDosyaAdi(String dosyaAdi) {
         this.dosyaAdi = dosyaAdi;
+    }
+   
+    public List<Araba> getArabaListesi() {
+        return arabaListesi;
+    }
+
+    public void setArabaListesi(List<Araba> arabaListesi) {
+        this.arabaListesi = arabaListesi;
     }
 
 }

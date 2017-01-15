@@ -119,6 +119,22 @@ public class TemelDao extends Dao {
         return arabaListesi;
     }
     
+    public List<Araba> getirArabaListesiKademeyeGore(Integer kademe) throws Exception {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Araba> arabaListesi;
+        try {
+
+            arabaListesi = session.createCriteria(Araba.class)
+                    .createAlias("kademe", kademe.toString()).list();
+
+        } catch (HibernateException e) {            
+            throw e;
+        } finally {
+            session.close();
+        }
+        return arabaListesi;
+    }
+    
     public Long getirKullaniciSayisi() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Long kullaniciSayisi;
