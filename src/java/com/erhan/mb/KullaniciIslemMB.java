@@ -44,7 +44,6 @@ public class KullaniciIslemMB implements Serializable {
     private byte[] resim;
     private String email;
     private String resimAdi;
-    
 
     private UploadedFile uploadedFile;
     private boolean gosterGuncelle;
@@ -92,7 +91,7 @@ public class KullaniciIslemMB implements Serializable {
             yeniKullanici.setSoyad(this.getSoyad());
             yeniKullanici.setResim(this.getResim());
             yeniKullanici.setEmail(this.getEmail());
-            yeniKullanici.setResimAdi(this.getResimAdi());            
+            yeniKullanici.setResimAdi(this.getResimAdi());
             yeniKullanici.setSifre(this.getSifre());
             temelDao.kaydetObje(yeniKullanici);
             log.debug("Kaydetme : " + yeniKullanici + " kaydedildi.");
@@ -122,8 +121,10 @@ public class KullaniciIslemMB implements Serializable {
             this.setTcKimlikNo(secilenKullanici.getTcKimlikNo());
             this.setAd(secilenKullanici.getAd());
             this.setSoyad(secilenKullanici.getSoyad());
-            sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(secilenKullanici.getResim())));
-            this.setResim(secilenKullanici.getResim());
+            if (secilenKullanici.getResim() != null) {
+                sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(secilenKullanici.getResim())));
+                this.setResim(secilenKullanici.getResim());
+            }
             this.setEmail(secilenKullanici.getEmail());
             this.setResimAdi(secilenKullanici.getResimAdi());
             RequestContext context = RequestContext.getCurrentInstance();
@@ -158,7 +159,7 @@ public class KullaniciIslemMB implements Serializable {
         this.setResimAdi(this.getTcKimlikNo() + "." + extension);
         sessionMB.setImage(new DefaultStreamedContent(new ByteArrayInputStream(uploadedFile.getContents())));
         this.setResim(uploadedFile.getContents());
-    }  
+    }
 
 ///////////////////// Getter ve Setter ////////////////////////////////////////
     public SessionMB getSessionMB() {
@@ -295,7 +296,7 @@ public class KullaniciIslemMB implements Serializable {
 
     public void setResimAdi(String resimAdi) {
         this.resimAdi = resimAdi;
-    }   
+    }
 
     public Araba getSecilenAraba() {
         return secilenAraba;
@@ -303,5 +304,5 @@ public class KullaniciIslemMB implements Serializable {
 
     public void setSecilenAraba(Araba secilenAraba) {
         this.secilenAraba = secilenAraba;
-    }   
+    }
 }

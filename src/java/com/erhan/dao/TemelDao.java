@@ -3,6 +3,7 @@ package com.erhan.dao;
 import com.erhan.model.Araba;
 import com.erhan.model.Kullanici;
 import com.erhan.model.Menu;
+import com.erhan.model.Tree;
 import com.erhan.util.HibernateUtil;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -82,6 +83,21 @@ public class TemelDao extends Dao {
             query.setParameter("ustMenuId", ustMenuId);
             menuListesi = query.list();
             return menuListesi;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+    
+    public List<Tree> getirTreeListesiUstTreeyeGore(int ustTreeId) throws Exception {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Tree> treeListesi;
+        try {
+            Query query = session.createQuery("from Tree where ustTreeId = :ustTreeId ");
+            query.setParameter("ustTreeId", ustTreeId);
+            treeListesi = query.list();
+            return treeListesi;
         } catch (Exception e) {
             throw e;
         } finally {

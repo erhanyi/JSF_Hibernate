@@ -43,7 +43,7 @@
             </p:layoutUnit>
             <p:layoutUnit position="center">
 
-                <p:idleMonitor timeout="10000" onidle="PF('idleDialog').show();" />
+                <p:idleMonitor timeout="10000000" onidle="PF('idleDialog').show();" />
                 <p:dialog id="confirmDialog" appendTo="@(body)" modal="true"                              
                           header="Are you there?"  widgetVar="idleDialog"
                           onShow="startIdleMonitor()">

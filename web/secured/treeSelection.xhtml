@@ -1,0 +1,28 @@
+<ui:composition template="template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:messages id="messages" closable="true" autoUpdate="true"/>
+            <p:tree value="#{treeSelectionMB.root}" var="menu"
+                    selectionMode="single" style="width: 90%;"
+                    animate="true"
+                    selection="#{treeSelectionMB.selectedNode}">
+                <p:ajax event="select" update="form1" />
+                <p:treeNode icon="ui-icon-note">
+                    <h:outputText value="#{menu}"/>
+                </p:treeNode>                   
+            </p:tree>
+        </h:form>
+        <h:form id="form1">
+            <p:panel id="deneme" rendered="#{treeSelectionMB.selectedNode ne null}" style="width: 90%;">
+                <p:outputLabel value="#{treeSelectionMB.selectedNode}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+
