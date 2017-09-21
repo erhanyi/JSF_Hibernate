@@ -61,3 +61,5 @@
     animation-iteration-count: 1;
     animation-timing-function: linear;
 }
+
+.badge{color:#e17009;background-color:green}

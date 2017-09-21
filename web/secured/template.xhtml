@@ -13,13 +13,16 @@
         <p:layout fullPage="true">
             <p:layoutUnit styleClass="myLayoutStyleClass" position="north" size="100" 
                           style="background-image: url(../images/bulut.jpg); background-size:100%; ">
+                <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
                 <h:form>
                     <p:toolbarGroup>
                         <div class="ui-toolbar-group-left">LEFT</div>
                         <div class="ui-toolbar-group-right">
                             <center>
 
-                                <p:outputLabel value="Hoşgeldiniz #{sessionMB.kullanici.ad} #{sessionMB.kullanici.soyad}" />
+                                <p:outputLabel value="Hoşgeldiniz #{sessionMB.kullanici.ad} #{sessionMB.kullanici.soyad}" >
+                                    <span class="badge bg-green">6</span>
+                                </p:outputLabel>
                                 <p:graphicImage id="myImage" value="#{sessionMB.imageKullanici}" height="40" 
                                                 alt="Resim Yok."/>
                                 <br/><br/>
@@ -112,5 +115,29 @@
                 </center>
             </p:layoutUnit>
         </p:layout>
+        <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+            <f:facet name="default">
+                <h:outputText value="Lütfen Bekleyiniz....." />
+            </f:facet>
+
+            <f:facet name="start">
+                <p:outputLabel value="Lütfen Bekleyiniz....." />
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="Tamamlandı..." />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                <p:outputLabel value="Lütfen Bekleyiniz." />
+
+        </p:dialog>
+
+        <h:form>
+            <p:commandButton value="Send" icon="ui-icon-refresh" />
+        </h:form>
     </h:body>
 </html>

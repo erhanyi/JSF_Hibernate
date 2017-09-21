@@ -20,8 +20,9 @@ public class Araba implements Serializable, Comparable<Araba> {
 
     @Id
     @Column(name = "arabaid", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arabaidseq")
-    @SequenceGenerator(name = "arabaidseq", sequenceName = "arabaidseq", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arabaidseq")
+//    @SequenceGenerator(name = "arabaidseq", sequenceName = "arabaidseq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer arabaId;
     @Column(name = "arabamarka", nullable = false)
     private String arabaMarka;

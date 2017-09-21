@@ -33,10 +33,10 @@ public class LoginFilter implements Filter {
         if (sessionMB == null || !sessionMB.isLoggedIn()) {
             String contextPath = ((HttpServletRequest) request).getContextPath();
             ((HttpServletResponse) response).sendRedirect(contextPath + "/error.jsf");
-        }
+        } 
         chain.doFilter(request, response);
     }
-
+   
     @Override
     public void destroy() {
         // TODO Auto-generated method stub		

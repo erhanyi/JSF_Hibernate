@@ -57,4 +57,9 @@
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
    
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/error.jsf</location>
+    </error-page>
+   
 </web-app>
